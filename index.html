@@ -1805,5 +1805,52 @@ drawChart(0);
 galRender();
 })();
 </script>
+  <script>
+/* ═══ RING FIX — rebuild HOLO DECK with REAL project screenshots ═══ */
+(function(){
+  var ring=document.getElementById('ring');
+  if(!ring)return;
+  ring.innerHTML='';
+  var L2={
+    webcut:'https://webcut-pro-ruddy.vercel.app/',
+    luxzy:'https://luxzy-file-converter.vercel.app/',
+    omnipress:'https://omnipress-app.vercel.app/',
+    filecompressor:'https://file-compressor-rho.vercel.app/',
+    uapv:'https://uapv-yt-downloader.vercel.app/',
+    quizcraft:'https://quizcraft-pro.vercel.app/',
+    classroom:'https://classroom-chat-flax.vercel.app/',
+    noufa:'https://noufa-s-kitchen.vercel.app/',
+    clientbase:'https://portfolio-2-0-eta-lac.vercel.app/',
+    kmct:'https://kmct-ietm-28-in-1-register-production.up.railway.app/',
+    yip:'https://yip-9-0.vercel.app/',
+    sunora:'#commerce'
+  };
+  var RING=[
+    ['webcut','WEBCUT PRO','BROWSER NLE','projects/webcut'],
+    ['luxzy','LUXZY STUDIO','AI CONVERTER','projects/luxzy'],
+    ['omnipress','OMNIPRESS','FILE ENGINE','projects/omnipress'],
+    ['filecompressor','FILE COMPRESSOR','COMPRESSION','projects/omnipress'],
+    ['uapv','UAPV DOWNLOADER','YT ENGINE','projects/uapv'],
+    ['quizcraft','QUIZCRAFT PRO','EDTECH','projects/quizcraft'],
+    ['classroom','CLASSROOMCHAT','REALTIME EDTECH','projects/ClassroomChat'],
+    ['noufa',"NOUFA'S KITCHEN",'SPICE COMMERCE','projects/noufa'],
+    ['clientbase','CLIENT PORTFOLIO','BRAND SITE','projects/Client_base_portfolio'],
+    ['kmct','KMCT IETM','MEGA PROJECT','projects/KMCT-IETM'],
+    ['yip','YIP-9.0','PRODUCT STUDIO','projects/Yip-9.0-Project'],
+    ['sunora','SUNORA AURA','₹14.9L STORE','photos/shopify-dashboard']
+  ];
+  RING.forEach(function(p,i){
+    var a=document.createElement('a');
+    a.className='rcard';
+    a.href=L2[p[0]]||'#';
+    if((L2[p[0]]||'#').charAt(0)!=='#')a.target='_blank';
+    a.rel='noopener';
+    a.style.transform='rotateY('+(i*(360/RING.length))+'deg) translateZ(300px)';
+    a.innerHTML='<img src="'+p[3]+'.jpg" data-base="'+p[3]+'" data-fb="'+p[3]+'.jpg" alt="'+p[1]+'" loading="lazy">'
+      +'<span class="rn">'+p[1]+'</span><span class="rt">'+p[2]+' · OPEN ↗</span>';
+    ring.appendChild(a);
+  });
+})();
+</script>
 </body>
 </html>

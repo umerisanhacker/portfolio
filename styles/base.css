@@ -284,9 +284,8 @@ body.touring .tourbar{transform:translate(-50%,0)}
 .vmedia img{width:100%;height:100%;object-fit:cover;object-position:top;filter:saturate(.94) contrast(1.05);transform-origin:var(--photo-x,50%) var(--photo-y,50%);transition:transform .8s cubic-bezier(.22,.8,.2,1),filter .55s}
 .strips{display:flex;flex-direction:column;gap:22px;overflow:hidden}
 .strip{overflow:hidden;border:1px solid var(--line);background:var(--bg2);will-change:transform}
-.strip-track{display:flex;gap:22px;width:max-content;padding:26px 20px;animation:tick 44s linear infinite}
-.strip.rev .strip-track{animation-direction:reverse;animation-duration:52s}
-.strip:hover .strip-track{animation-play-state:paused}
+.strip-track{display:flex;gap:22px;width:max-content;padding:26px 20px;animation:tick 32s linear infinite;will-change:transform}
+.strip.rev .strip-track{animation-direction:reverse;animation-duration:38s}
 .vmedia.photo-focus img{transform:scale(1.13);filter:saturate(1.18) contrast(1.06) brightness(1.035)}
 .vmedia.photo-focus::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--photo-x,50%) var(--photo-y,50%),rgba(255,255,255,.18),transparent 28%),linear-gradient(120deg,transparent 35%,rgba(255,255,255,.08) 48%,transparent 61%);mix-blend-mode:screen}
 .sframe{width:400px;flex:none;border:1px solid var(--line2);background:var(--bg);transition:border-color .3s,box-shadow .4s,transform .18s ease-out;transform-style:preserve-3d;will-change:transform;cursor:pointer}
@@ -571,7 +570,7 @@ body.menu-open .menu a.ml:nth-child(5){transition-delay:.43s}body.menu-open .men
   .at{font-size:1.1rem}
   .arow .m{font-size:.52rem;line-height:1.9}
   .strip{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .strip-track{animation-duration:70s;padding-right:40px}
+  .strip-track{animation-duration:48s;padding-right:40px}
   .sframe{width:min(82vw,380px)}
   .ct-grid{grid-template-columns:1fr 1fr}
   .coach{grid-template-columns:1fr}

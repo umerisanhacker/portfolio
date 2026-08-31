@@ -18,3 +18,13 @@
 .arow.is-new .lv{color:var(--gold)}.arow.is-new .lv::before{content:"✦ ";color:var(--magenta)}.sframe.is-new{border-color:rgba(255,200,90,.35);box-shadow:0 20px 70px rgba(157,124,255,.08)}.sframe.is-new::after{background:linear-gradient(90deg,var(--cyan),var(--violet),var(--magenta),var(--gold))}.no-live{cursor:pointer}.no-live .go{font-size:1.1rem}
 @media (max-width:800px){.ring-wrap{height:540px}.ring{width:235px;height:300px;margin:-150px 0 0 -117.5px}.rcard{width:235px;height:300px}.ring-meta{grid-template-columns:1fr}.ring-meta-signal{text-align:left}.ring-wrap::before{width:88vw}.ring-wrap::after{width:68vw}}
 @media (prefers-reduced-motion:reduce){body::before,.sec-title,.progress span,#holo::before,.ring-wrap::before,.ring-wrap::after{animation:none!important}.frame:hover .portrait-clip img{animation:none!important}.grain{animation:none!important}}
+/* V8 AUTO-DECK OVERRIDE — no drag, no wheel scrubbing, automatic progression only */
+.ring-wrap{height:520px;overflow:hidden;cursor:default;touch-action:pan-y;user-select:none;-webkit-user-select:none;}
+.ring{width:250px;height:330px;margin:-165px 0 0 -125px;}
+.rcard{transition:transform .95s cubic-bezier(.22,.8,.2,1),opacity .7s ease,box-shadow .4s ease,border-color .4s ease;}
+.rcard:not(.is-active){filter:saturate(.78) brightness(.82);}
+.rcard.is-active{filter:none;}
+@media(max-width:700px){
+  .ring-wrap{height:460px;}
+  .ring{width:184px;height:248px;margin:-124px 0 0 -92px;}
+}

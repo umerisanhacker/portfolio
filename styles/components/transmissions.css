@@ -1,1 +1,18 @@
-/* TESTIMONIAL STACK — cinematic scroll deck */
+/* TRANSMISSIONS — physical card stack / scroll choreography */
+.transmissions-deck{position:relative;margin-top:clamp(34px,6vw,76px);height:calc(100vh * 3.2);}
+.transmissions-deck .quotes{position:sticky;top:10vh;height:78vh;display:block;perspective:1800px;transform-style:preserve-3d;overflow:visible;}
+.transmissions-deck .quote{position:absolute;left:50%;top:50%;width:min(900px,84vw);height:min(560px,68vh);min-height:0;padding:clamp(30px,4vw,64px);margin:0;background:var(--bg2);overflow:hidden;border-radius:clamp(12px,1.3vw,20px);transform-origin:50% 100%;backface-visibility:hidden;will-change:transform,opacity,filter;box-shadow:0 38px 100px rgba(0,0,0,.5);transition:border-color .35s ease,box-shadow .35s ease;}
+.transmissions-deck .quote::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.15),transparent 28%,transparent 68%,rgba(255,255,255,.035));mix-blend-mode:screen;z-index:1;}
+.transmissions-deck .quote::before{z-index:3;}
+.transmissions-deck .quote p{position:relative;z-index:4;font-family:var(--serif);font-size:clamp(1.45rem,2.5vw,2.35rem);line-height:1.38;max-width:780px;margin:clamp(52px,7vh,86px) 0 44px;letter-spacing:-.015em;}
+.transmissions-deck .quote .who{position:relative;z-index:4;}
+.transmissions-deck .quote .stack-index{z-index:5;}
+.transmissions-deck .deck-hint{position:sticky;top:88vh;z-index:50;display:flex;justify-content:center;pointer-events:none;font-family:var(--mono);font-size:.55rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;}
+@media(max-width:700px){
+  .transmissions-deck{height:calc(100svh * 3.15);margin-top:32px;}
+  .transmissions-deck .quotes{top:9svh;height:78svh;}
+  .transmissions-deck .quote{width:90vw;height:64svh;min-height:0;padding:28px 24px;border-radius:15px;}
+  .transmissions-deck .quote p{font-size:clamp(1.15rem,5.4vw,1.55rem);line-height:1.45;margin-top:56px;margin-bottom:34px;}
+  .transmissions-deck .quote .who{flex-direction:column;align-items:flex-start;gap:8px;}
+  .transmissions-deck .deck-hint{top:89svh;font-size:.48rem;letter-spacing:.14em;padding-inline:10px;}
+}

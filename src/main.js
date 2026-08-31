@@ -274,7 +274,7 @@ var TOUR=[
  {sel:'#hero',cap:'THE OPERATOR — 18 · self-taught · Kerala ⇄ UAE'},
  {sel:'#manifesto',cap:'MANIFESTO — receipts, not resumes'},
  {sel:'#dossier',cap:'DOSSIER — the human behind the builds'},
- {sel:'#arsenal',cap:'THE ARSENAL — 14 builds, hover = live'},
+ {sel:'#arsenal',cap:'THE ARSENAL — 17 builds, hover = live'},
  {sel:'#screens',cap:'INTERFACE ARCHIVE — click any frame for the lightbox'},
  {sel:'#commerce',cap:'COMMERCE ENGINE — ₹14.9L flagship store'},
  {sel:'#crucible',cap:'THE CRUCIBLE — 100 → 35 → 70 kg'},

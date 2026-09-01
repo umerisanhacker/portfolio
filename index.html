@@ -819,64 +819,7 @@ body{background:radial-gradient(circle at 20% 10%,rgba(106,245,232,.035),transpa
   function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fn,{once:true}); else fn(); }
 
   ready(function(){
-    /* Holo Deck: automatic, non-draggable, non-wheel-controlled sequence. */
-    var wrap=document.getElementById('ringWrap'), ring=document.getElementById('ring');
-    if(wrap&&ring){
-      var data=(D.HOLO_PROJECTS||[]).slice();
-      var live=D.HOLO_LIVE||{};
-      ring.innerHTML='';
-      var cards=[];
-      data.forEach(function(p,i){
-        var a=document.createElement('a'); a.className='rcard'; a.dataset.index=i; a.dataset.key=p[0]||''; a.dataset.accent=p[6]||'cyan';
-        var dest='#';
-        if(p[5]==='live') dest=live[p[0]]||'#'; else if(p[5]==='internal') dest='#commerce';
-        a.href=dest;
-        if(p[5]==='live'){a.target='_blank'; a.rel='noopener'}
-        var img=document.createElement('img'); img.src=p[3]; img.alt=p[1]||'Project'; img.loading='eager'; a.appendChild(img);
-        var rn=document.createElement('span'); rn.className='rn'; rn.textContent=p[1]||''; a.appendChild(rn);
-        var rt=document.createElement('span'); rt.className='rt'; rt.textContent=(p[2]||'PROJECT')+' · '+(p[5]==='local'?'LOCAL BUILD':(p[5]==='internal'?'INTERNAL':'LIVE ↗')); a.appendChild(rt);
-        ring.appendChild(a); cards.push(a);
-      });
-      var oldMeta=wrap.parentElement&&wrap.parentElement.querySelector('.ring-meta');
-      if(oldMeta) oldMeta.remove();
-      var meta=document.createElement('div'); meta.className='ring-meta'; meta.innerHTML='<div class="ring-meta-main"><b id="ringMetaTitle"></b><small id="ringMetaSub"></small></div><div class="ring-meta-signal"><i></i><span id="ringMetaStatus">AUTO</span></div>';
-      wrap.insertAdjacentElement('afterend',meta);
-
-      var current=0;
-      var count=cards.length||1;
-      var timer=0;
-      function norm(n){n%=count; return n<0?n+count:n}
-      function delta(i){var d=i-current;if(d>count/2)d-=count;if(d<-count/2)d+=count;return d}
-      function render(){
-        var isMobile=window.innerWidth<650, spread=isMobile?210:(window.innerWidth<950?260:330), depth=isMobile?66:90, fan=isMobile?9:11;
-        var active=norm(Math.round(current));
-        cards.forEach(function(card,i){
-          var d=delta(i), ad=Math.abs(d), x=d*spread, z=260-ad*depth, ry=-d*fan, sc=Math.max(isMobile?.78:.72,1-ad*(isMobile?.11:.075)), op=ad>3?0:Math.max(.16,1-ad*(isMobile?.18:.12));
-          card.style.transform='translate3d(calc(-50% + '+x.toFixed(1)+'px), -50%, '+z.toFixed(1)+'px) rotateY('+ry.toFixed(2)+'deg) scale('+sc.toFixed(3)+')';
-          card.style.opacity=String(op.toFixed(3));
-          card.style.zIndex=String(100-Math.round(ad*8));
-          card.classList.toggle('is-active',i===active);
-        });
-        var p=data[active];
-        var t=document.getElementById('ringMetaTitle'), s=document.getElementById('ringMetaSub');
-        if(t)t.textContent=p?p[1]:''; if(s)s.textContent=p?((p[2]||'PROJECT')+' · '+(p[5]==='local'?'LOCAL BUILD':(p[5]==='internal'?'INTERNAL EXPERIENCE':'LIVE SYSTEM'))):'';
-        var stat=document.getElementById('ringMetaStatus'); if(stat)stat.textContent='BUILD '+String(active+1).padStart(2,'0')+' / '+count;
-        var h=wrap.querySelector('.ring-hint'); if(h) h.textContent='AUTO-SEQUENCE · '+(p?p[1]:'')+' · NEXT IN 2.8s · CLICK TO OPEN';
-      }
-      function next(){current=norm(Math.round(current)+1);render()}
-      function schedule(){clearInterval(timer);timer=setInterval(next,2800)}
-      cards.forEach(function(card,i){card.addEventListener('click',function(e){
-        var d=Math.abs(delta(i));
-        if(d>.4){e.preventDefault();current=i;render();return;}
-        var p=data[i];
-        if(!p)return;
-        if(p[5]==='local'&&typeof window.openCase==='function'){e.preventDefault();window.openCase(p[0]);}
-        else if(p[5]==='internal'){e.preventDefault();location.hash='commerce';}
-      })});
-      window.addEventListener('resize',render,{passive:true});
-      render(); schedule();
-      U.Components=U.Components||{}; U.Components.cleanHolo={render:render,next:next};
-    }
+    /* Holo Deck is managed by the final V11 runtime below. */
 
     /* Interface Archive: duplicate each row once for a genuinely seamless marquee. */
     document.querySelectorAll('#screens .strip-track').forEach(function(track){
@@ -1033,58 +976,139 @@ body{background:radial-gradient(circle at 18% 8%,rgba(100,242,228,.055),transpar
     D.CASES.logocraft={p:'New local build presented as an interactive portfolio project preview. Public hosting is not configured yet.',s:'A visual brand studio interface designed around exploration, presentation and polished interaction.',st:'Local build · Brand studio',m:['NEW BUILD','LOCAL MEDIA PREVIEW','NOT HOSTED YET'],live:false};
     D.CASES.scamshield={p:'New local build presented as an interactive portfolio project preview. Public hosting is not configured yet.',s:'A security-oriented AI interface presented as a local portfolio build.',st:'Local build · Security AI',m:['NEW BUILD','LOCAL MEDIA PREVIEW','NOT HOSTED YET'],live:false};
 
-    /* ---------- Holo Deck: automatic physical-card sequence; no cursor/scroll control ---------- */
+    /* ---------- Holo Deck: final automatic physical-card sequence ---------- */
     (function(){
-      var wrap=document.getElementById('ringWrap'),ring=document.getElementById('ring'); if(!wrap||!ring)return;
-      var data=D.HOLO_PROJECTS.slice(),count=data.length||1,current=0,timer=null;
+      var wrap=document.getElementById('ringWrap'), ring=document.getElementById('ring');
+      if(!wrap||!ring)return;
+      var projects=[
+        ['webcut','WEBCUT PRO','BROWSER NLE','assets/projects/webcut.jpg',null,'live','cyan'],
+        ['luxzy','LUXZY STUDIO','AI CONVERTER','assets/projects/luxzy.jpg',null,'live','violet'],
+        ['omnipress','OMNIPRESS','FILE ENGINE','assets/projects/omnipress.jpg',null,'live','magenta'],
+        ['filecompressor','FILE COMPRESSOR','COMPRESSION','assets/projects/omnipress.jpg',null,'live','gold'],
+        ['uapv','UAPV DOWNLOADER','YT ENGINE','assets/projects/uapv.jpg',null,'live','cyan'],
+        ['quizcraft','QUIZCRAFT PRO','EDTECH','assets/projects/quizcraft.jpg',null,'live','violet'],
+        ['classroom','CLASSROOMCHAT','REALTIME EDTECH','assets/projects/ClassroomChat.jpg',null,'live','magenta'],
+        ['noufa',"NOUFA'S KITCHEN",'SPICE COMMERCE','assets/projects/noufa.jpg',null,'live','gold'],
+        ['clientbase','CLIENT PORTFOLIO','BRAND SITE','assets/projects/Client_base_portfolio.jpg',null,'live','cyan'],
+        ['kmct','KMCT IETM','MEGA PROJECT','assets/projects/KMCT-IETM.jpg',null,'live','violet'],
+        ['yip','YIP-9.0','PRODUCT STUDIO','assets/projects/Yip-9.0-Project.jpg',null,'live','magenta'],
+        ['sunora','SUNORA AURA','₹14.9L STORE','assets/photos/shopify-dashboard.jpg',null,'internal','gold'],
+        ['nova','NOVA-AI','AI PRODUCT','assets/projects/Nova-AI.jpg',null,'local','cyan'],
+        ['studyflow','STUDYFLOW-AI','EDTECH AI','assets/projects/StudyFlow-AI.jpg',null,'local','violet'],
+        ['aura','AURA ROUTINE APP','ROUTINE SYSTEM','assets/projects/Aura-RoutineApp.jpg',null,'local','gold'],
+        ['logocraft','LOGOCRAFT STUDIO','BRAND STUDIO','assets/projects/logocraft studio.jpg',null,'local','magenta'],
+        ['scamshield','SCAMSHIELD AI','SECURITY AI','assets/projects/scamshield-AI.jpg',null,'local','violet']
+      ];
+      var live={
+        webcut:'https://webcut-pro-ruddy.vercel.app/',
+        luxzy:'https://luxzy-file-converter.vercel.app/',
+        omnipress:'https://omnipress-app.vercel.app/',
+        filecompressor:'https://file-compressor-rho.vercel.app/',
+        uapv:'https://uapv-yt-downloader.vercel.app/',
+        quizcraft:'https://quizcraft-pro.vercel.app/',
+        classroom:'https://classroom-chat-flax.vercel.app/',
+        noufa:'https://noufa-s-kitchen.vercel.app/',
+        clientbase:'https://portfolio-2-0-eta-lac.vercel.app/',
+        kmct:'https://kmct-ietm-28-in-1-register-production.up.railway.app/',
+        yip:'https://yip-9-0.vercel.app/'
+      };
+
       ring.innerHTML='';
-      var cards=[];
-      data.forEach(function(item,i){
-        var el=document.createElement('a');
-        el.className='rcard';
-        el.dataset.index=i;
-        var img=document.createElement('img');img.src=item[3];img.alt=item[1]+' project preview';img.loading=i<5?'eager':'lazy';el.appendChild(img);
-        var rn=document.createElement('span');rn.className='rn';rn.textContent=item[1];el.appendChild(rn);
-        var rt=document.createElement('span');rt.className='rt';rt.textContent=(item[2]||'PROJECT')+' · '+(item[5]==='local'?'LOCAL BUILD':item[5]==='internal'?'INTERNAL EXPERIENCE':'LIVE ↗');el.appendChild(rt);
-        ring.appendChild(el);cards.push({el:el,item:item,index:i});
-        el.addEventListener('click',function(e){
-          var d=i-current;if(d>count/2)d-=count;if(d<-count/2)d+=count;
-          if(Math.abs(d)>0){e.preventDefault();return;}
-          if(item[5]==='live'&&D.HOLO_LIVE&&D.HOLO_LIVE[item[0]]){e.preventDefault();window.open(D.HOLO_LIVE[item[0]],'_blank','noopener');return;}
-          if(typeof window.openCase==='function'){e.preventDefault();window.openCase(item[0])}
+      var count=projects.length, current=0, timer=null, cards=[];
+      var meta=wrap.parentElement && wrap.parentElement.querySelector('.ring-meta');
+      if(meta)meta.remove();
+      meta=document.createElement('div');
+      meta.className='ring-meta holo-meta-final';
+      meta.innerHTML='<div class="ring-meta-main"><b id="ringMetaTitle"></b><small id="ringMetaSub"></small></div><div class="ring-meta-signal"><i></i><span id="ringMetaStatus">AUTO</span></div>';
+      wrap.insertAdjacentElement('afterend',meta);
+
+      projects.forEach(function(item,i){
+        var a=document.createElement('a');
+        a.className='rcard';
+        a.dataset.index=i;
+        a.dataset.key=item[0];
+        a.dataset.accent=item[6];
+        var href='#';
+        if(item[5]==='live') href=live[item[0]]||'#';
+        else if(item[5]==='internal') href='#commerce';
+        a.href=href;
+        if(item[5]==='live'){a.target='_blank';a.rel='noopener'}
+        a.innerHTML='<img src="'+item[3]+'" alt="'+item[1]+' project preview" loading="eager"><span class="rn">'+item[1]+'</span><span class="rt">'+item[2]+' · '+(item[5]==='local'?'LOCAL BUILD':item[5]==='internal'?'INTERNAL EXPERIENCE':'LIVE ↗')+'</span>';
+        a.addEventListener('click',function(e){
+          var d=Math.abs(relative(i));
+          if(d>0){e.preventDefault();return;}
+          if(item[5]==='local' && typeof window.openCase==='function'){e.preventDefault();window.openCase(item[0]);}
+          else if(item[5]==='internal'){e.preventDefault();location.hash='commerce';}
         });
+        ring.appendChild(a);
+        cards.push(a);
       });
-      function rel(i){var d=i-current;if(d>count/2)d-=count;if(d<-count/2)d+=count;return d}
-      function render(){
-        var w=window.innerWidth,isMobile=w<650,isTablet=w<950;
-        var step=isMobile?200:(isTablet?250:315);
-        var activeZ=isMobile?120:190;
-        var scaleUnit=isMobile?.12:.085;
-        cards.forEach(function(c){
-          var d=rel(c.index),ad=Math.abs(d),visible=ad<=2;
-          var x=d*step;
-          var z=activeZ-ad*(isMobile?52:58);
-          var sc=Math.max(isMobile?.75:.68,1-ad*scaleUnit);
-          var ry=d*(isMobile?8:9.5);
-          c.el.style.transform='translate3d(calc(-50% + '+x.toFixed(1)+'px), -50%, '+z.toFixed(1)+'px) rotateY('+ry.toFixed(2)+'deg) scale('+sc.toFixed(3)+')';
-          c.el.style.opacity=visible?String(ad===0?1:(ad===1?.72:.34)):'0';
-          c.el.style.filter=ad===0?'none':('blur('+(ad===1?.3:1.5)+'px)');
-          c.el.style.pointerEvents=ad===0?'auto':'none';
-          c.el.style.zIndex=String(100-ad*10);
-          c.el.classList.toggle('is-active',ad===0);
-        });
-        var active=data[current];
-        var title=document.getElementById('ringMetaTitle'),sub=document.getElementById('ringMetaSub'),stat=document.getElementById('ringMetaStatus');
-        if(title)title.textContent=active[1];
-        if(sub)sub.textContent=(active[2]||'PROJECT')+' · '+(active[5]==='local'?'LOCAL BUILD':active[5]==='internal'?'INTERNAL EXPERIENCE':'LIVE SYSTEM');
-        if(stat)stat.textContent='BUILD '+String(current+1).padStart(2,'0')+' / '+count;
-        var hint=document.querySelector('#holo .ring-hint');if(hint)hint.textContent='AUTO-SEQUENCE · '+active[1]+' · HOLDS 3.0s · NO POINTER CONTROL';
-        var hc=document.querySelector('#holo .sec-count');if(hc)hc.textContent='/ '+count+' BUILDS IN ORBIT';
+
+      function relative(i){
+        var d=i-current;
+        if(d>count/2)d-=count;
+        if(d<-count/2)d+=count;
+        return d;
       }
-      function next(){current=(current+1)%count;render()}
-      function start(){clearInterval(timer);timer=setInterval(next,3000)}
-      render();start();window.addEventListener('resize',render,{passive:true});
-      U.Components=U.Components||{};U.Components.v10Holo={render:render,next:next};
+
+      function render(){
+        var w=window.innerWidth || document.documentElement.clientWidth;
+        var mobile=w<650, tablet=w<980;
+        var spread=mobile?196:(tablet?265:338);
+        var depth=mobile?48:72;
+        var fan=mobile?9:10.5;
+        var activeZ=mobile?92:155;
+        var cardScale=mobile?0.98:1;
+        cards.forEach(function(card,i){
+          var d=relative(i), ad=Math.abs(d), visible=ad<=2;
+          var x=d*spread;
+          var z=activeZ-ad*depth;
+          var ry=-d*fan;
+          var sc=(ad===0?1:(ad===1?.87:.75))*cardScale;
+          var op=ad===0?1:(ad===1?.78:.36);
+          var blur=ad===0?0:(ad===1?.15:1.25);
+          var y=ad===0?0:(d===0?0:(d<0?5:5));
+          card.style.transform='translate3d(calc(-50% + '+x.toFixed(1)+'px), calc(-50% + '+y.toFixed(1)+'px), '+z.toFixed(1)+'px) rotateY('+ry.toFixed(2)+'deg) scale('+sc.toFixed(3)+')';
+          card.style.opacity=visible?op.toFixed(3):'0';
+          card.style.filter='blur('+blur+'px)';
+          card.style.zIndex=String(100-ad*10+(d===0?10:0));
+          card.style.pointerEvents=ad===0?'auto':'none';
+          card.classList.toggle('is-active',ad===0);
+          card.dataset.position=String(d);
+        });
+        var item=projects[current];
+        var title=document.getElementById('ringMetaTitle'), sub=document.getElementById('ringMetaSub'), status=document.getElementById('ringMetaStatus');
+        if(title)title.textContent=item[1];
+        if(sub)sub.textContent=item[2]+' · '+(item[5]==='local'?'LOCAL BUILD':item[5]==='internal'?'INTERNAL EXPERIENCE':'LIVE SYSTEM');
+        if(status)status.textContent='BUILD '+String(current+1).padStart(2,'0')+' / '+count;
+        var hint=document.querySelector('#holo .ring-hint');
+        if(hint)hint.textContent='AUTO-SEQUENCE · '+item[1]+' · HOLDS 2.8s · NO POINTER / WHEEL CONTROL';
+        var sc=document.querySelector('#holo .sec-count');
+        if(sc)sc.textContent='/ '+count+' BUILDS IN ORBIT';
+      }
+
+      function advance(){
+        current=(current+1)%count;
+        render();
+        schedule();
+      }
+      function schedule(){
+        clearTimeout(timer);
+        timer=setTimeout(advance,2800);
+      }
+      function resetAndResume(){
+        clearTimeout(timer);
+        render();
+        schedule();
+      }
+
+      /* Deliberately no drag, wheel, pointer-scrub, or touch-scrub listeners. */
+      window.addEventListener('resize',render,{passive:true});
+      document.addEventListener('visibilitychange',function(){if(document.hidden){clearTimeout(timer)}else resetAndResume()});
+      render();
+      schedule();
+      U.Components=U.Components||{};
+      U.Components.finalHolo={render:render,next:advance};
     })();
 
     /* ---------- Archive: cleanly rebuild both rows from the 17-image catalogue ---------- */
@@ -1147,6 +1171,21 @@ body{background:radial-gradient(circle at 18% 8%,rgba(100,242,228,.055),transpar
   });
 })();
 </script>
+
+
+<style id="holo-final-stability">
+#holo{overflow:hidden!important}
+#holo .ring-wrap{height:590px!important;min-height:590px!important;overflow:visible!important;perspective:1450px!important;perspective-origin:50% 48%!important;touch-action:none!important;overscroll-behavior:contain!important;user-select:none!important;cursor:default!important;position:relative!important}
+#holo .ring{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;transform-style:preserve-3d!important;pointer-events:none!important}
+#holo .rcard{position:absolute!important;left:50%!important;top:50%!important;width:min(30vw,340px)!important;height:min(42vw,455px)!important;min-height:340px!important;transform-origin:center center!important;transform-style:preserve-3d!important;backface-visibility:hidden!important;overflow:hidden!important;transition:transform 1.0s cubic-bezier(.18,.82,.2,1),opacity .75s ease,filter .75s ease,box-shadow .55s ease,border-color .45s ease!important;will-change:transform,opacity,filter!important;background:#0a1221!important;pointer-events:none!important}
+#holo .rcard.is-active{pointer-events:auto!important;cursor:pointer!important}
+#holo .rcard img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important;transform:scale(1.01)!important;transition:transform .9s cubic-bezier(.2,.75,.2,1),filter .75s ease!important}
+#holo .rcard.is-active img{transform:scale(1.035)!important}
+#holo .ring-meta.holo-meta-final{max-width:1180px!important;margin:0 auto 8px!important}
+@media(max-width:980px){#holo .ring-wrap{height:520px!important;min-height:520px!important}#holo .rcard{width:270px!important;height:380px!important;min-height:0!important}}
+@media(max-width:650px){#holo .ring-wrap{height:430px!important;min-height:430px!important}#holo .rcard{width:220px!important;height:310px!important}.holo-meta-final{padding:0 8px!important}}
+@media(prefers-reduced-motion:reduce){#holo .rcard{transition:none!important}}
+</style>
 
 </body>
 </html>

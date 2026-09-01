@@ -965,7 +965,7 @@ max-width:1000px}
     if(!root)return;
     try{if(window.UmerPortfolio&&UmerPortfolio.Components&&UmerPortfolio.Components.finalHolo){UmerPortfolio.Components.finalHolo.stop();}}catch(e){}
     var U=window.UmerPortfolio=window.UmerPortfolio||{},D=U.Data=U.Data||{};
-    var projects=Array.isArray(D.HOLO_PROJECTS)?D.HOLO_PROJECTS.slice(0,19):[];
+    var projects=Array.isArray(D.HOLO_PROJECTS)?D.HOLO_PROJECTS.slice(0,17):[];
     if(!projects.length)return;
     var live=D.HOLO_LIVE||{};
     root.innerHTML=''+
@@ -1448,5 +1448,176 @@ max-width:1000px}
 })();
 </script>
 
+
+<style id="v17-life-timeline-fix">
+/* Targeted timeline-only repair: restore the intended right-to-left, scroll-linked life sequence. */
+#life{
+  position:relative!important;
+  width:100%!important;
+  height:100vh!important;
+  min-height:100svh!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+}
+#life .tl-sticky{
+  position:sticky!important;
+  top:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  height:100svh!important;
+  display:flex!important;
+  align-items:center!important;
+  overflow:hidden!important;
+  overscroll-behavior:contain!important;
+}
+#life .tl-track{
+  position:relative!important;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:stretch!important;
+  gap:clamp(24px,5vw,72px)!important;
+  width:max-content!important;
+  min-width:max-content!important;
+  padding-inline:clamp(9vw,14vw,18vw)!important;
+  margin:0!important;
+  left:0!important;
+  right:auto!important;
+  transform:translate3d(0,0,0)!important;
+  will-change:transform!important;
+}
+#life .tl-item{
+  box-sizing:border-box!important;
+  flex:0 0 clamp(360px,72vw,900px)!important;
+  width:clamp(360px,72vw,900px)!important;
+  min-width:clamp(360px,72vw,900px)!important;
+  min-height:min(58vh,580px)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  padding:clamp(28px,5vw,72px)!important;
+  position:relative!important;
+  overflow:hidden!important;
+  opacity:.58!important;
+  transform:scale(.94)!important;
+  transform-origin:center!important;
+  border:1px solid rgba(220,230,255,.10)!important;
+  background:linear-gradient(180deg,rgba(14,22,38,.92),rgba(7,12,23,.96))!important;
+  box-shadow:0 20px 70px rgba(0,0,0,.16),inset 0 0 80px rgba(106,245,232,.025)!important;
+  transition:transform .65s cubic-bezier(.16,1,.3,1),opacity .65s ease,border-color .65s ease,box-shadow .65s ease!important;
+}
+#life .tl-item::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  pointer-events:none!important;
+  background:
+    linear-gradient(90deg,rgba(106,245,232,.10),transparent 26%,transparent 74%,rgba(181,156,255,.08)),
+    repeating-linear-gradient(0deg,transparent 0 31px,rgba(255,255,255,.018) 32px)!important;
+  opacity:.55!important;
+}
+#life .tl-item::after{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:3px!important;
+  height:100%!important;
+  background:linear-gradient(180deg,transparent,var(--acid),transparent)!important;
+  opacity:.25!important;
+}
+#life .tl-item.is-active{
+  opacity:1!important;
+  transform:scale(1)!important;
+  border-color:rgba(106,245,232,.42)!important;
+  box-shadow:0 30px 90px rgba(0,0,0,.24),0 0 70px rgba(106,245,232,.06),inset 0 0 80px rgba(106,245,232,.035)!important;
+}
+#life .tl-item .y{
+  position:relative!important;
+  z-index:1!important;
+  display:block!important;
+  font-size:clamp(3rem,8vw,7.5rem)!important;
+  line-height:.84!important;
+  margin-bottom:clamp(18px,3vw,34px)!important;
+  color:var(--acid)!important;
+}
+#life .tl-item h4,#life .tl-item p{position:relative!important;z-index:1!important}
+#life .tl-item h4{max-width:18ch!important}
+#life .tl-item p{max-width:46ch!important}
+@media(max-width:700px){
+  #life .tl-track{gap:16px!important;padding-inline:8vw!important}
+  #life .tl-item{flex-basis:84vw!important;width:84vw!important;min-width:84vw!important;min-height:64svh!important;padding:24px!important;transform:scale(.97)!important}
+  #life .tl-item.is-active{transform:scale(1)!important}
+  #life .tl-item .y{font-size:clamp(3rem,17vw,5.2rem)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #life .tl-item{transition:none!important}
+}
+</style>
+
+<script id="v17-life-timeline-runtime">
+(function(){
+  'use strict';
+  var life=document.getElementById('life');
+  var track=document.getElementById('tlTrack');
+  if(!life||!track)return;
+  var items=Array.prototype.slice.call(track.querySelectorAll('.tl-item'));
+  if(!items.length)return;
+  var maxX=0,targetX=0,currentX=0,lastTarget=0,raf=0,measuring=false;
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function measure(){
+    if(measuring)return;
+    measuring=true;
+    requestAnimationFrame(function(){
+      var viewport=Math.max(1,window.innerWidth);
+      maxX=Math.max(0,track.scrollWidth-viewport);
+      /* Make the vertical travel exactly match the horizontal travel. */
+      var travel=Math.max(maxX,Math.round(window.innerHeight*.9));
+      life.style.setProperty('height',(window.innerHeight+travel)+'px','important');
+      measuring=false;
+      updateTarget();
+      render(true);
+    });
+  }
+  function updateTarget(){
+    var rect=life.getBoundingClientRect();
+    var travel=Math.max(1,life.offsetHeight-window.innerHeight);
+    var p=clamp(-rect.top/travel,0,1);
+    targetX=p*maxX;
+    return p;
+  }
+  function setActive(progress){
+    if(items.length<2)return;
+    var idx=Math.round(progress*(items.length-1));
+    idx=clamp(idx,0,items.length-1);
+    for(var i=0;i<items.length;i++)items[i].classList.toggle('is-active',i===idx);
+  }
+  function render(immediate){
+    raf=0;
+    updateTarget();
+    if(immediate)currentX=targetX;
+    else currentX+= (targetX-currentX)*0.22;
+    if(Math.abs(targetX-currentX)<0.15)currentX=targetX;
+    track.style.setProperty('transform','translate3d('+(-currentX).toFixed(2)+'px,0,0)','important');
+    var progress=maxX?currentX/maxX:0;
+    setActive(progress);
+    if(Math.abs(targetX-currentX)>0.2 && !document.hidden) raf=requestAnimationFrame(render);
+  }
+  function schedule(){
+    if(raf)return;
+    raf=requestAnimationFrame(render);
+  }
+  addEventListener('scroll',schedule,{passive:true});
+  addEventListener('resize',measure,{passive:true});
+  addEventListener('orientationchange',measure,{passive:true});
+  if(window.ResizeObserver){
+    var ro=new ResizeObserver(measure);ro.observe(track);
+  }
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)schedule();},{passive:true});
+  /* Fonts/layout may settle after first paint. */
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure).catch(measure);
+  window.addEventListener('load',measure,{once:true});
+  measure();
+})();
+</script>
 </body>
 </html>

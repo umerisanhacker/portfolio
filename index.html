@@ -236,7 +236,7 @@
 </ul>
 <div class="about-stats" data-reveal="" style="--d:.3s">
 <div><b data-inr="2192450">₹21,92,450</b><small>Self-made revenue</small></div>
-<div><b><span data-count="14">0</span></b><small>Builds</small></div>
+<div><b><span data-count="19">0</span></b><small>Builds</small></div>
 <div><b><span data-count="1285" data-loc="in">0</span></b><small>Store orders</small></div>
 <div><b><span data-count="18">0</span></b><small>Years old</small></div>
 </div>
@@ -327,6 +327,19 @@
 <div class="cv-hud"><span id="cvCurrent">01</span><div class="cv-meter"><i id="cvMeterFill"></i></div><span>15</span></div>
 </div>
 <div class="cv-footer"><div><span id="cvCategory">CREATIVE AI</span><b id="cvTitle">Create Engaging Video with Google Vids</b><small id="cvIssuer">Google / SkillUp · 28 AUG 2026</small></div><div class="cv-actions"><button type="button" class="cv-btn" id="cvAutoplay">AUTO · ON</button><button type="button" class="cv-btn" id="cvOpen">OPEN CERTIFICATE ↗</button></div></div>
+</div>
+</section>
+<section class="tline" id="life">
+<div class="tl-sticky">
+<div class="tl-track" id="tlTrack">
+<div class="tl-item"><span class="y">2007</span><h4>BORN — KERALA</h4><p>Dec 19. A kitchen full of spice and a head full of questions.</p></div>
+<div class="tl-item"><span class="y">2012</span><h4>UAE YEARS</h4><p>Two cultures, one work ethic. The lake days, the blue tee.</p></div>
+<div class="tl-item"><span class="y">2021</span><h4>100 KG — THE DECISION</h4><p>The obese kid decides, once and for all, to change.</p></div>
+<div class="tl-item"><span class="y">2022</span><h4>35 → 70 KG REBUILD</h4><p>Overshoot, learn, rebuild. First coaching clients.</p></div>
+<div class="tl-item"><span class="y">2023</span><h4>SUNORA AURA GOES LIVE</h4><p>₹14.9L and 1,285 orders across 24 months.</p></div>
+<div class="tl-item"><span class="y">2024</span><h4>THE ARSENAL SHIPS</h4><p>WebCut, Luxzy, OmniPress, UAPV, QuizCraft, Noufa's…</p></div>
+<div class="tl-item"><span class="y">2025</span><h4>₹20L+ — AND COUNTING</h4><p>KMCT, Yip-9.0, client builds. Eighteen and unstoppable.</p></div>
+</div>
 </div>
 </section>
 <section class="sec" id="screens">
@@ -952,7 +965,7 @@ max-width:1000px}
     if(!root)return;
     try{if(window.UmerPortfolio&&UmerPortfolio.Components&&UmerPortfolio.Components.finalHolo){UmerPortfolio.Components.finalHolo.stop();}}catch(e){}
     var U=window.UmerPortfolio=window.UmerPortfolio||{},D=U.Data=U.Data||{};
-    var projects=Array.isArray(D.HOLO_PROJECTS)?D.HOLO_PROJECTS.slice(0,17):[];
+    var projects=Array.isArray(D.HOLO_PROJECTS)?D.HOLO_PROJECTS.slice(0,19):[];
     if(!projects.length)return;
     var live=D.HOLO_LIVE||{};
     root.innerHTML=''+
@@ -1302,5 +1315,138 @@ max-width:1000px}
   render();schedule();
 })();
 </script>
+
+<style id="v16-final-repair-style">
+/* Final stability layer: keep the document crisp; the previous parent-level blur made
+   entire sections look soft while scrolling. */
+.sec.far{filter:none!important;opacity:1!important}
+/* Keep intentional local blur only on non-active cards, never on the section itself. */
+/* Timeline: stable horizontal track; JS below owns the transform. */
+#life{position:relative;height:320vh;overflow:hidden}
+#life .tl-sticky{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;overflow:hidden}
+#life .tl-track{display:flex;gap:clamp(20px,4vw,64px);width:max-content;will-change:transform;transform:translate3d(0,0,0)!important}
+#life .tl-item{flex:0 0 min(72vw,760px);min-height:44vh;display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,4vw,54px)!important}
+#life .tl-item .y{font-size:clamp(2.4rem,6vw,6rem);line-height:.9;color:var(--acid);font-family:var(--disp);font-weight:900}
+/* Receipt must reveal in its own scroll frame and remain crisp. */
+#receipt .receipt{will-change:transform;opacity:1!important;filter:none!important}
+#receipt .print-sticky{position:sticky!important;top:0!important}
+/* Holo: show the full 19-project catalogue and avoid blur-heavy side cards. */
+#holo .holo-v13-card{filter:none!important}
+#holo .holo-v13-card:not(.is-active){opacity:.5!important}
+#holo .holo-v13-card.is-active{opacity:1!important}
+#holo .holo-v13-stage{overflow:hidden!important;contain:layout paint!important}
+/* Archive rows are CSS-driven; don't let page-scroll transforms overwrite the track. */
+#screens .strip-track{will-change:transform!important;animation-play-state:running!important}
+#screens .strip:hover .strip-track{animation-play-state:paused!important}
+/* Mobile: remove expensive blur/translucency and keep interaction effects lightweight. */
+@media(max-width:700px){
+  .sec.far{filter:none!important;opacity:1!important}
+  .identity-glow,.cv-glow,#holo .holo-v13-glow{filter:none!important;animation:none!important;opacity:.28!important}
+  .identity-orbit,.identity-portrait-frame{animation:none!important}
+  #life{height:300vh}
+  #life .tl-item{flex-basis:86vw;min-height:46vh}
+  #screens .sframe:hover{transform:none!important}
+  #screens .sframe:hover .vmedia img{transform:scale(1.03)!important}
+  #holo .holo-v13-stage{height:420px!important;min-height:420px!important}
+  #holo .holo-v13-card{width:min(78vw,300px)!important;height:min(60vh,360px)!important}
+  #holo .holo-v13-card:not(.is-active){opacity:.16!important}
+  .backdrop-filter-disabled{backdrop-filter:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #life .tl-track,#screens .strip-track{animation:none!important;transition:none!important}
+}
+</style>
+<script id="v16-final-repair-runtime">
+(function(){
+  'use strict';
+  var raf=0;
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function schedule(fn){ if(raf) return; raf=requestAnimationFrame(function(){raf=0;fn();}); }
+
+  /* ---- RESTORE / HARDEN HORIZONTAL LIFE TIMELINE ---- */
+  var life=document.getElementById('life'), tl=document.getElementById('tlTrack');
+  function renderTimeline(){
+    if(!life||!tl)return;
+    var rr=life.getBoundingClientRect();
+    var span=Math.max(1,life.offsetHeight-window.innerHeight);
+    var p=clamp(-rr.top/span,0,1);
+    var max=Math.max(0,tl.scrollWidth-window.innerWidth);
+    tl.style.setProperty('transform','translate3d('+(-p*max)+'px,0,0)','important');
+  }
+  if(life&&tl){
+    addEventListener('scroll',function(){schedule(renderTimeline)},{passive:true});
+    addEventListener('resize',function(){schedule(renderTimeline)},{passive:true});
+    renderTimeline();
+  }
+
+  /* ---- RESTORE / HARDEN 100 → 35 → 70 KG CRUCIBLE ---- */
+  var cruc=document.getElementById('crucible'), cNum=document.getElementById('cNum'), cAct=document.getElementById('cAct'), cDesc=document.getElementById('cDesc'), cProg=document.getElementById('cProg'), cB=document.getElementById('bpm'), ghost=document.getElementById('ghostW');
+  var bgR=document.getElementById('cbR'), bgG=document.getElementById('cbG'), bgA=document.getElementById('cbA');
+  var last=-1;
+  var acts=[
+    {t:'ACT I — THE BURDEN',d:'Obese at fourteen. Decided, once and for all, to change.',g:'BURDEN',c:'#ff5c8a',b:62},
+    {t:'ACT II — THE OVERSHOOT',d:'Thirty-five kilos. The lesson was clear: discipline without direction can overshoot.',g:'LESSON',c:'#92a0b8',b:148},
+    {t:'ACT III — THE REBUILD',d:'Seventy kilos, athletic. Regained with intent — now I coach others through their own arc.',g:'REBUILT',c:'#63f6e7',b:72}
+  ];
+  function renderCrucible(){
+    if(!cruc||!cNum)return;
+    var rr=cruc.getBoundingClientRect();
+    var denom=Math.max(1,cruc.offsetHeight-window.innerHeight);
+    var p=clamp(-rr.top/denom,0,1);
+    var val=p<=.5?100-(65*(p/.5)):35+(35*((p-.5)/.5));
+    var act=p<.333?0:(p<.666?1:2);
+    cNum.innerHTML=Math.round(val)+'<small>kg</small>';
+    cNum.style.color=acts[act].c;
+    if(cAct)cAct.innerHTML=acts[act].t+' · <span id="bpm">'+acts[act].b+'</span> BPM';
+    if(cDesc)cDesc.textContent=acts[act].d;
+    if(cB)cB.textContent=acts[act].b;
+    if(ghost)ghost.textContent=acts[act].g;
+    if(cProg)cProg.style.width=(p*100).toFixed(2)+'%';
+    if(bgR)bgR.style.opacity=act===0?'1':'0';
+    if(bgG)bgG.style.opacity=act===1?'1':'0';
+    if(bgA)bgA.style.opacity=act===2?'1':'0';
+    if(cruc)cruc.style.setProperty('--pc',acts[act].c);
+    if(act!==last){
+      last=act;
+      cNum.classList.remove('pop'); void cNum.offsetWidth; cNum.classList.add('pop');
+      if(ghost){ghost.classList.remove('on');void ghost.offsetWidth;ghost.classList.add('on');}
+    }
+  }
+  if(cruc){
+    addEventListener('scroll',function(){schedule(renderCrucible)},{passive:true});
+    addEventListener('resize',function(){schedule(renderCrucible)},{passive:true});
+    renderCrucible();
+  }
+
+  /* ---- RECEIPT: single scroll owner ---- */
+  var receipt=document.getElementById('receipt'), paper=document.getElementById('receiptPaper');
+  function renderReceipt(){
+    if(!receipt||!paper)return;
+    var rr=receipt.getBoundingClientRect();
+    var span=Math.max(1,receipt.offsetHeight-window.innerHeight);
+    var p=clamp(-rr.top/span,0,1);
+    paper.style.transform='translate3d(0,'+((1-p)*102)+'%,0)';
+  }
+  if(receipt&&paper){
+    addEventListener('scroll',function(){schedule(renderReceipt)},{passive:true});
+    addEventListener('resize',function(){schedule(renderReceipt)},{passive:true});
+    renderReceipt();
+  }
+
+  /* ---- HOLO: use every project instead of the stale 17-project slice ---- */
+  var U=window.UmerPortfolio||{}, D=U.Data||{};
+  if(Array.isArray(D.HOLO_PROJECTS))D.HOLO_PROJECTS=D.HOLO_PROJECTS.slice(0,19);
+
+  /* ---- GLOBAL MOBILE SAFETY ---- */
+  var mobile=matchMedia('(max-width:700px)').matches || (navigator.deviceMemory&&navigator.deviceMemory<=2);
+  if(mobile){
+    document.body.classList.add('mobile-lite');
+    var bg=document.getElementById('bg'),glow=document.getElementById('glow');
+    if(bg)bg.style.display='none';
+    if(glow)glow.style.display='none';
+  }
+})();
+</script>
+
 </body>
 </html>

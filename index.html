@@ -8,7 +8,7 @@
 <meta content="18. Self-taught. ₹20L+ revenue. 100kg→70kg. Builder of WebCut Pro, Imprint, Luxzy, OmniPress, File Compressor, UAPV, QuizCraft, ClassroomChat, Noufa's Kitchen, KMCT, Yip-9.0 &amp; the Sunora Aura commerce engine." name="description"/>
 <meta content="#04050D" name="theme-color"/>
 <meta content="UMER ABDULLAH PV — Architect of Code &amp; Commerce" property="og:title"/>
-<meta content="18. Self-taught. ₹20L+ self-made. 100kg→70kg. 17 builds across products, tools, commerce and experimental interfaces." property="og:description"/>
+<meta content="18. Self-taught. ₹20L+ self-made. 100kg→70kg. 19 builds across products, tools, commerce and experimental interfaces." property="og:description"/>
 <meta content="" id="ogImg" property="og:image"/>
 <script>document.documentElement.classList.add('js')</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/><link href="styles/base.css" rel="stylesheet"/><link href="styles/theme-polar.css" rel="stylesheet"/><link href="styles/theme-prism.css" rel="stylesheet"/><link href="styles/components/holo.css" rel="stylesheet"/><link href="styles/components/transmissions.css" rel="stylesheet"/><link href="styles/components/hero.css" rel="stylesheet"/><link href="styles/components/universe.css" rel="stylesheet"/><link href="styles/components/build-mode.css" rel="stylesheet"/><link href="styles/components/lab.css" rel="stylesheet"/><link href="styles/components/black-room.css" rel="stylesheet"/><link href="styles/components/dossier-plus.css" rel="stylesheet"/>
@@ -45,6 +45,229 @@
 @media(max-width:1050px){#holo .ring-wrap{height:515px!important;min-height:515px!important}#holo .rcard{width:255px!important;height:365px!important}}
 @media(max-width:680px){#holo .sec-head{margin-bottom:8px!important}#holo .ring-wrap{height:420px!important;min-height:420px!important;margin-top:0!important}#holo .rcard{width:220px!important;height:315px!important}#holo .rn{left:16px!important;right:16px!important;bottom:40px!important;font-size:.78rem!important}#holo .rt{left:16px!important;right:16px!important;bottom:18px!important;font-size:.44rem!important}#holo .holo-progress{left:6%!important;right:6%!important;bottom:9px!important;gap:9px!important}#holo .holo-progress-label{display:none!important}#holo .ring-meta.holo-meta-final{padding:0 4px!important}}
 @media(prefers-reduced-motion:reduce){#holo .rcard,#holo .rcard img,#holo .holo-progress-line i{transition:none!important}}
+</style>
+
+<script id="index-only-performance-guard">
+(function () {
+  try {
+    var root = document.documentElement;
+    var mqMobile = window.matchMedia('(max-width: 760px)');
+    var cores = navigator.hardwareConcurrency || 8;
+    var memory = navigator.deviceMemory || 8;
+    var saveData = navigator.connection && navigator.connection.saveData;
+    var slowConnection = navigator.connection && /(^|-)2g|slow-2g/i.test(navigator.connection.effectiveType || '');
+    if (mqMobile.matches || cores <= 4 || memory <= 4 || saveData || slowConnection) {
+      root.classList.add('perf-lite');
+      window.__UMER_PERF_LITE = true;
+
+      var nativeGetContext = HTMLCanvasElement.prototype.getContext;
+      function noopGradient() { return { addColorStop: function(){} }; }
+      function noopContext() {
+        return {
+          clearRect:function(){}, beginPath:function(){}, arc:function(){}, fill:function(){}, stroke:function(){},
+          moveTo:function(){}, lineTo:function(){}, save:function(){}, restore:function(){}, translate:function(){},
+          rotate:function(){}, fillText:function(){}, createLinearGradient:noopGradient, createPattern:function(){},
+          drawImage:function(){}, rect:function(){}, closePath:function(){}, fillRect:function(){},
+          strokeRect:function(){}, measureText:function(){return {width:0}}
+        };
+      }
+      HTMLCanvasElement.prototype.getContext = function(type) {
+        if (this.id === 'gl' && /webgl/i.test(type || '')) return null;
+        if (this.id === 'bg' && type === '2d') return noopContext();
+        return nativeGetContext.apply(this, arguments);
+      };
+    }
+  } catch (e) {}
+})();
+</script>
+
+<style id="index-only-v14-systems">
+:root{
+  --bg:#0b0e12;
+  --bg2:#11161d;
+  --bg3:#171d25;
+  --line:rgba(235,239,244,.12);
+  --line2:rgba(235,239,244,.26);
+  --fg:#f4f1ea;
+  --dim:#a6afb9;
+  --acid:#9ec7c1;
+  --cyan:#9ec7c1;
+  --violet:#9aa7bc;
+  --blue:#91a6bd;
+  --ember:#b77970;
+  --rose:#b48d93;
+  --gold:#c3a873;
+  --lime:#a6b895;
+  --orange:#b98d72;
+  --magenta:#aa91a0;
+  --glass:rgba(17,22,29,.82);
+  --hair:rgba(176,190,203,.18);
+}
+html,body{background:#0b0e12;color:var(--fg);overflow-x:hidden}
+body{background:
+  radial-gradient(900px 600px at 72% 14%, rgba(116,150,160,.11), transparent 64%),
+  radial-gradient(700px 500px at 18% 72%, rgba(140,120,95,.08), transparent 66%),
+  linear-gradient(180deg,#0b0e12 0%,#0e131a 48%,#0b0f14 100%);
+}
+#gl,#bg{opacity:.18!important}
+.perf-lite #gl,.perf-lite #bg{display:none!important}
+.perf-lite *, .perf-lite *::before, .perf-lite *::after{
+  animation-duration:calc(var(--motion-scale,1) * 1s)!important;
+}
+.perf-lite .cruc-p,.perf-lite .cruc-bg,.perf-lite .build-ambient,.perf-lite .genome-orbit,.perf-lite .genome-node{animation:none!important}
+.perf-lite .build-scan,.perf-lite .build-wire{display:none!important}
+.perf-lite .mag,.perf-lite .cursor,.perf-lite .cursor-ring{display:none!important}
+
+@media (min-width:761px){
+  #arsenal .arow{transform:none!important}
+  #arsenal .arow .athumb img{transition:transform .55s cubic-bezier(.16,1,.3,1),filter .55s ease}
+  #arsenal .arow:hover .athumb img{transform:scale(1.055);filter:saturate(1.04) contrast(1.03)}
+  #arsenal .arow{transition:border-color .35s ease,background-color .35s ease,box-shadow .35s ease}
+  #arsenal .arow:hover{border-color:rgba(158,199,193,.34)!important;box-shadow:0 18px 45px rgba(0,0,0,.18)}
+}
+
+#holo.v14-holo{position:relative;isolation:isolate}
+#holo.v14-holo .wrap{position:relative;z-index:3}
+.v14-holo-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:end;gap:20px;margin-bottom:10px}
+.v14-holo-kicker{font:700 .68rem/1 var(--mono);letter-spacing:.22em;color:#c3a873}
+.v14-holo-rule{height:1px;background:linear-gradient(90deg,rgba(158,199,193,.8),rgba(154,167,188,.45),transparent)}
+.v14-holo-count{font:700 .7rem/1 var(--mono);letter-spacing:.18em;color:var(--dim)}
+.v14-holo-viewport{position:relative;height:min(66vh,670px);min-height:470px;margin:0 auto;overflow:hidden;border:1px solid rgba(220,228,236,.12);background:
+  radial-gradient(520px 280px at 50% 48%,rgba(146,170,180,.09),transparent 68%),
+  linear-gradient(180deg,rgba(8,11,16,.20),rgba(8,11,16,.48));
+  perspective:1400px;
+}
+.v14-holo-viewport::before,.v14-holo-viewport::after{content:"";position:absolute;inset:0;pointer-events:none}
+.v14-holo-viewport::before{background:linear-gradient(90deg,transparent 0%,rgba(158,199,193,.04) 50%,transparent 100%);opacity:.7}
+.v14-holo-viewport::after{inset:11%;border:1px solid rgba(180,190,200,.07);box-shadow:inset 0 0 80px rgba(0,0,0,.32)}
+.v14-holo-card{position:absolute;left:50%;top:50%;width:clamp(280px,28vw,390px);aspect-ratio:4/5;transform-origin:center center;backface-visibility:hidden;will-change:transform,opacity,filter;transition:transform .95s cubic-bezier(.16,1,.3,1),opacity .7s ease,filter .7s ease;display:block;text-decoration:none;color:var(--fg);border:1px solid rgba(220,228,236,.17);background:#10151b;overflow:hidden;box-shadow:0 28px 55px rgba(0,0,0,.28)}
+.v14-holo-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.16,1,.3,1),filter .5s ease}
+.v14-holo-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,9,13,.03) 40%,rgba(6,9,13,.82) 100%);pointer-events:none}
+.v14-holo-card.is-active{border-color:rgba(195,201,204,.48);box-shadow:0 35px 80px rgba(0,0,0,.36),0 0 0 1px rgba(158,199,193,.12)}
+.v14-holo-card.is-active img{transform:scale(1.018);filter:saturate(1.02)}
+.v14-holo-card .v14-card-top{position:absolute;left:14px;right:14px;top:12px;z-index:2;display:flex;justify-content:space-between;align-items:center;font:700 .57rem var(--mono);letter-spacing:.12em;color:rgba(244,241,234,.78)}
+.v14-holo-card .v14-dots{display:flex;gap:5px}.v14-holo-card .v14-dots i{width:7px;height:7px;border-radius:50%;background:#4b5562}.v14-holo-card .v14-dots i:first-child{background:#c3a873}
+.v14-card-bottom{position:absolute;left:18px;right:18px;bottom:16px;z-index:2}
+.v14-card-index{font:700 .58rem var(--mono);letter-spacing:.15em;color:#aab4bf;margin-bottom:6px}
+.v14-card-title{font:900 clamp(1.05rem,1.6vw,1.45rem)/.98 var(--disp);letter-spacing:.01em}
+.v14-card-sub{margin-top:7px;font:700 .58rem/1.35 var(--mono);letter-spacing:.12em;color:#bac2c9}
+.v14-holo-meta{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:16px 4px 0}
+.v14-holo-meta-main{min-width:0}.v14-holo-meta-title{font:900 clamp(1.05rem,2vw,1.5rem)/1 var(--disp)}.v14-holo-meta-sub{margin-top:6px;font:700 .62rem/1.2 var(--mono);letter-spacing:.15em;color:var(--dim)}
+.v14-holo-meta-status{font:700 .63rem/1 var(--mono);letter-spacing:.14em;color:#b9c8c4;white-space:nowrap}
+.v14-holo-meta-status i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a7c0ba;margin-right:8px}
+.v14-holo-hint{padding:10px 4px 0;text-align:center;font:700 .57rem/1.4 var(--mono);letter-spacing:.18em;color:#8e99a4}
+
+#screens .v14-archive{overflow:hidden}
+#screens .v14-archive-row{position:relative;overflow:hidden;margin:0 0 24px;border-top:1px solid rgba(220,228,236,.08);border-bottom:1px solid rgba(220,228,236,.08);background:rgba(9,13,17,.22)}
+#screens .v14-archive-track{display:flex;width:max-content;gap:18px;padding:18px 18px 18px 0;will-change:transform;animation:archive-left 42s linear infinite}
+#screens .v14-archive-row.reverse .v14-archive-track{animation-name:archive-right;animation-duration:46s}
+#screens .v14-archive-row.is-paused .v14-archive-track{animation-play-state:paused}
+#screens .v14-archive-card{display:block;width:clamp(280px,31vw,500px);flex:0 0 auto;text-decoration:none;color:inherit;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+#screens .v14-archive-card:hover{transform:translateY(-4px)}
+#screens .v14-archive-media{position:relative;aspect-ratio:16/9;overflow:hidden;border:1px solid rgba(220,228,236,.14);background:#10151b;box-shadow:0 18px 38px rgba(0,0,0,.18)}
+#screens .v14-archive-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .65s cubic-bezier(.16,1,.3,1),filter .55s ease}
+#screens .v14-archive-card:hover .v14-archive-media img{transform:scale(1.075);filter:saturate(1.05) contrast(1.03)}
+#screens .v14-archive-chrome{position:absolute;left:0;right:0;top:0;height:34px;background:rgba(8,11,15,.72);backdrop-filter:blur(10px);display:flex;align-items:center;padding:0 10px;gap:6px;z-index:1}
+#screens .v14-archive-chrome i{width:7px;height:7px;border-radius:50%;background:#44515e}.v14-archive-chrome i:first-child{background:#c3a873}
+#screens .v14-archive-host{margin-left:auto;font:600 .55rem var(--mono);letter-spacing:.08em;color:#aeb8c2}
+#screens .v14-archive-cap{padding:9px 2px 0;display:flex;justify-content:space-between;gap:12px}
+#screens .v14-archive-cap b{font:800 .7rem/1 var(--mono);letter-spacing:.14em}
+#screens .v14-archive-cap span{font:700 .57rem/1 var(--mono);letter-spacing:.14em;color:#9da8b3}
+@keyframes archive-left{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+@keyframes archive-right{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
+
+#arsenal .v14-arsenal{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#arsenal .v14-ars-card{position:relative;display:grid;grid-template-columns:40% minmax(0,1fr) auto;gap:14px;align-items:center;padding:10px;border:1px solid rgba(220,228,236,.11);background:rgba(14,19,25,.72);text-decoration:none;color:inherit;min-width:0;transition:transform .35s ease,border-color .35s ease,background-color .35s ease}
+#arsenal .v14-ars-card:hover{transform:translateY(-3px);border-color:rgba(158,199,193,.28);background:rgba(18,24,31,.9)}
+#arsenal .v14-ars-thumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0f1419}
+#arsenal .v14-ars-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .55s cubic-bezier(.16,1,.3,1)}
+#arsenal .v14-ars-card:hover .v14-ars-thumb img{transform:scale(1.06)}
+#arsenal .v14-ars-code{position:absolute;right:8px;bottom:8px;padding:5px 7px;background:rgba(8,11,14,.82);font:700 .55rem var(--mono);letter-spacing:.1em}
+#arsenal .v14-ars-body{min-width:0}.v14-ars-top{font:700 .56rem var(--mono);letter-spacing:.15em;color:#aab4be}.v14-ars-name{margin-top:7px;font:900 clamp(1rem,1.55vw,1.5rem)/1 var(--disp)}.v14-ars-sub{margin-top:7px;font:700 .57rem/1.3 var(--mono);letter-spacing:.12em;color:#99a4af}
+#arsenal .v14-ars-go{font:700 .8rem var(--mono);color:#b9c8c4}
+.v14-ars-tools{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px}
+.v14-ars-filter{border:1px solid rgba(220,228,236,.15);background:rgba(12,16,21,.55);color:#b6c0ca;padding:8px 11px;font:700 .55rem var(--mono);letter-spacing:.14em;cursor:pointer}
+.v14-ars-filter.is-active{color:#0b0e12;background:#dce3df;border-color:#dce3df}
+.v14-ars-search{flex:1 1 220px;min-width:180px;border:1px solid rgba(220,228,236,.15);background:rgba(12,16,21,.55);color:var(--fg);padding:8px 11px;font:700 .58rem var(--mono);letter-spacing:.08em;outline:none}
+
+#identity.v14-build-engine-lite .build-grid{opacity:.2}
+#identity.v14-build-engine-lite .build-machine{overflow:hidden}
+#identity.v14-build-engine-lite .build-screen img{object-fit:contain!important;background:#0f1419}
+#identity.v14-build-engine-lite .build-scan,#identity.v14-build-engine-lite .build-wire{display:none!important}
+#identity.v14-build-engine-lite .genome-orbit{animation-duration:16s!important;opacity:.5}
+#identity.v14-build-engine-lite .genome-node{opacity:.55}
+
+@media(max-width:1050px){
+  #arsenal .v14-arsenal{grid-template-columns:1fr}
+  .v14-holo-card{width:min(34vw,340px)}
+}
+@media(max-width:760px){
+  :root{--navH:64px}
+  body{font-size:15px;background:
+    radial-gradient(500px 360px at 65% 6%,rgba(116,150,160,.08),transparent 68%),
+    linear-gradient(180deg,#0b0e12,#10151b 55%,#0b0f14)}
+  .wrap{width:min(100% - 20px, 1180px)!important}
+  .sec{overflow:clip}
+  .sec-head{gap:9px!important;align-items:end!important}
+  .sec-title{font-size:clamp(1.7rem,7.4vw,2.6rem)!important;letter-spacing:-.03em}
+  .sec-count{font-size:.53rem!important}
+  .sec-line{min-width:22px!important}
+  .v14-holo-head{grid-template-columns:auto 1fr;gap:9px;margin-bottom:8px}
+  .v14-holo-count{grid-column:1/-1;justify-self:end}
+  .v14-holo-viewport{height:58svh;min-height:390px;max-height:520px}
+  .v14-holo-card{width:min(80vw,360px);height:auto;aspect-ratio:4/5}
+  .v14-holo-card.v14-left,.v14-holo-card.v14-right{opacity:0!important;pointer-events:none!important}
+  .v14-holo-meta{padding:12px 1px 0;align-items:flex-start}
+  .v14-holo-meta-status{font-size:.53rem}
+  .v14-holo-hint{font-size:.5rem}
+  #screens .v14-archive-row{margin-bottom:14px}
+  #screens .v14-archive-track{gap:12px;padding:12px 12px 12px 0;animation-duration:58s}
+  #screens .v14-archive-row.reverse .v14-archive-track{animation-duration:62s}
+  #screens .v14-archive-card{width:78vw}
+  #screens .v14-archive-media{aspect-ratio:16/10}
+  #screens .v14-archive-chrome{height:28px;padding:0 7px}
+  #screens .v14-archive-chrome i{width:6px;height:6px}
+  #screens .v14-archive-host{font-size:.46rem}
+  #screens .v14-archive-cap{display:block}.v14-archive-cap span{display:block;margin-top:5px}
+  #arsenal .v14-arsenal{grid-template-columns:1fr;gap:9px}
+  #arsenal .v14-ars-card{grid-template-columns:36% minmax(0,1fr) auto;gap:10px;padding:7px}
+  #arsenal .v14-ars-name{font-size:clamp(.92rem,4vw,1.2rem)}
+  #arsenal .v14-ars-sub{font-size:.47rem}
+  #arsenal .v14-ars-top{font-size:.47rem}
+  #arsenal .v14-ars-go{font-size:.7rem}
+  .v14-ars-search{flex-basis:100%;min-width:0}
+  #identity .build-intro{grid-template-columns:1fr!important}
+  #identity .build-readout{margin-top:10px}
+  #identity .build-machine{grid-template-columns:1fr!important;grid-template-rows:auto 1fr auto!important;min-height:0!important}
+  #identity .build-rail{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;padding:6px!important}
+  #identity .build-stage-btn{min-width:0!important;padding:8px 4px!important;overflow:hidden}
+  #identity .build-stage-btn b{font-size:.48rem!important}
+  #identity .build-stage-btn small{display:none!important}
+  #identity .build-core{min-height:420px!important;width:100%!important}
+  #identity .build-screen{width:84%!important;height:58%!important;min-width:0!important;transform:none!important}
+  #identity .build-viewport{min-width:0!important;overflow:hidden!important}
+  #identity .build-project-strip{max-width:100%;overflow:hidden!important}
+  #identity .build-footer{min-width:0!important}
+  #identity .build-proof{display:none!important}
+  #identity .build-core-tag{left:10px!important;right:auto!important}
+  #identity .build-grid{opacity:.16}
+  .perf-lite #identity .genome-node,.perf-lite #identity .genome-orbit{animation:none!important}
+}
+@media(max-width:430px){
+  .nav{padding-inline:10px!important}
+  .navlinks{display:none!important}
+  #burger{display:grid!important}
+  .v14-holo-viewport{height:55svh;min-height:350px}
+  .v14-holo-card{width:84vw}
+  #arsenal .v14-ars-card{grid-template-columns:34% minmax(0,1fr) auto}
+  #arsenal .v14-ars-name{font-size:1rem}
+  #arsenal .v14-ars-sub{display:none}
+  #screens .v14-archive-card{width:84vw}
+}
+@media(prefers-reduced-motion:reduce){
+  .v14-holo-card,#screens .v14-archive-track,#screens .v14-archive-card,#arsenal .v14-ars-card{transition:none!important}
+  #screens .v14-archive-track{animation:none!important;transform:none!important}
+}
 </style>
 </head>
 <body id="top">
@@ -153,7 +376,7 @@
 </div>
 </section>
 <div aria-hidden="true" class="mq"><div class="mq-track" id="mq1">
-<span data-inr="2192450">₹21,92,450</span> SELF-MADE <em>✦</em><span>18 YEARS OLD <em>✦</em></span><span>17 BUILDS <em>✦</em></span><span>KERALA ⇄ UAE <em>✦</em></span><span>100KG → 70KG <em>✦</em></span><span>SHOPIFY OPERATOR <em>✦</em></span>
+<span data-inr="2192450">₹21,92,450</span> SELF-MADE <em>✦</em><span>18 YEARS OLD <em>✦</em></span><span>19 BUILDS <em>✦</em></span><span>KERALA ⇄ UAE <em>✦</em></span><span>100KG → 70KG <em>✦</em></span><span>SHOPIFY OPERATOR <em>✦</em></span>
 </div></div>
 <div aria-hidden="true" class="mq rev"><div class="mq-track" id="mq2">
 <span>vanilla js</span><span>✦</span><span>webgl shaders</span><span>✦</span><span>tauri + react</span><span>✦</span><span>ffmpeg pipelines</span><span>✦</span><span>shopify / liquid</span><span>✦</span><span>cro &amp; seo</span><span>✦</span><span>motion design</span><span>✦</span>
@@ -296,7 +519,7 @@
 </section>
 <section class="sec" id="holo">
 <div class="wrap">
-<header class="sec-head" data-reveal=""><span class="sec-idx">03.5</span><div class="sec-line"></div><h2 class="sec-title" data-scramble="">HOLO DECK</h2><span class="sec-count">/ AUTO-SEQUENCE · 17 BUILDS IN ORBIT</span></header>
+<header class="sec-head" data-reveal=""><span class="sec-idx">03.5</span><div class="sec-line"></div><h2 class="sec-title" data-scramble="">HOLO DECK</h2><span class="sec-count">/ AUTO-SEQUENCE · 19 BUILDS IN RUNWAY</span></header>
 </div>
 <div class="ring-wrap" id="ringWrap"><div class="ring" id="ring"></div></div>
 <div class="ring-hint">AUTO-SEQUENCE · EACH BUILD HOLDS FOR 2.8s · CLICK TO OPEN</div>
@@ -1143,7 +1366,7 @@ body{background:radial-gradient(circle at 18% 8%,rgba(100,242,228,.055),transpar
         group.forEach(function(p){track.appendChild(card(p))});
         group.forEach(function(p){var c=card(p);c.setAttribute('aria-hidden','true');c.tabIndex=-1;track.appendChild(c)});
       });
-      var header=document.querySelector('#screens .sec-count'); if(header)header.innerHTML=' / 17 BUILDS · HOVER ROW TO PAUSE · IMAGE FOCUS ONLY';
+      var header=document.querySelector('#screens .sec-count'); if(header)header.innerHTML=' / 19 BUILDS · HOVER ROW TO PAUSE · IMAGE FOCUS ONLY';
     })();
 
     /* ---------- Build Engine ---------- */
@@ -1355,6 +1578,306 @@ body{background:radial-gradient(circle at 18% 8%,rgba(100,242,228,.055),transpar
 })();
 </script>
 
+
+<script id="index-only-v14-production-runtime">
+(function(){
+  'use strict';
+  var U=window.UmerPortfolio=window.UmerPortfolio||{};
+  var D=U.Data=U.Data||{};
+  var byId=function(id){return document.getElementById(id)};
+  var qa=function(sel,root){return Array.prototype.slice.call((root||document).querySelectorAll(sel))};
+
+  function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fn,{once:true}); else fn(); }
+
+  ready(function(){
+    /* Stop previous experimental controllers before taking ownership of the relevant UI. */
+    try{
+      if(U.Components && U.Components.finalHolo && U.Components.finalHolo.stop) U.Components.finalHolo.stop();
+    }catch(e){}
+
+    /* ---------- Canonical project catalogue: every local project image is represented. ---------- */
+    var projects = [
+      ['webcut','WEBCUT PRO','BROWSER NLE','assets/projects/webcut.jpg','live','cyan'],
+      ['luxzy','LUXZY STUDIO','AI CONVERTER','assets/projects/luxzy.jpg','live','violet'],
+      ['omnipress','OMNIPRESS','FILE ENGINE','assets/projects/omnipress.jpg','live','green'],
+      ['filecompressor','FILE COMPRESSOR','COMPRESSION','assets/projects/omnipress.jpg','live','gold'],
+      ['uapv','UAPV DOWNLOADER','YT ENGINE','assets/projects/uapv.jpg','live','blue'],
+      ['quizcraft','QUIZCRAFT PRO','EDTECH','assets/projects/quizcraft.jpg','live','violet'],
+      ['classroom','CLASSROOMCHAT','REALTIME EDTECH','assets/projects/ClassroomChat.jpg','live','blue'],
+      ["noufa","NOUFA'S KITCHEN",'SPICE COMMERCE','assets/projects/noufa.jpg','live','green'],
+      ['clientbase','CLIENT PORTFOLIO','BRAND SITE','assets/projects/Client_base_portfolio.jpg','live','rose'],
+      ['kmct','KMCT IETM','MEGA PROJECT','assets/projects/KMCT-IETM.jpg','live','green'],
+      ['yip','YIP-9.0','PRODUCT STUDIO','assets/projects/Yip-9.0-Project.jpg','live','blue'],
+      ['sunora','SUNORA AURA','COMMERCE ENGINE','assets/photos/shopify-dashboard.jpg','internal','gold'],
+      ['nova','NOVA-AI','AI PRODUCT','assets/projects/Nova-AI.jpg','local','violet'],
+      ['studyflow','STUDYFLOW-AI','EDTECH AI','assets/projects/StudyFlow-AI.jpg','local','blue'],
+      ['aura','AURA ROUTINE APP','ROUTINE SYSTEM','assets/projects/Aura-RoutineApp.jpg','local','green'],
+      ['logocraft','LOGOCRAFT STUDIO','BRAND STUDIO','assets/projects/logocraft studio.jpg','local','rose'],
+      ['scamshield','SCAMSHIELD AI','SECURITY AI','assets/projects/scamshield-AI.jpg','local','violet'],
+      ['project-apex','PROJECT APEX','PRODUCT SYSTEM','assets/projects/Project-Apex.jpg','local','green'],
+      ['culinary-ai','CULINARY AI','AI PRODUCT','assets/projects/culinary AI.jpg','local','gold']
+    ];
+    var liveLinks={
+      webcut:'https://webcut-pro-ruddy.vercel.app/',
+      luxzy:'https://luxzy-file-converter.vercel.app/',
+      omnipress:'https://omnipress-app.vercel.app/',
+      filecompressor:'https://file-compressor-rho.vercel.app/',
+      uapv:'https://uapv-yt-downloader.vercel.app/',
+      quizcraft:'https://quizcraft-pro.vercel.app/',
+      classroom:'https://classroom-chat-flax.vercel.app/',
+      noufa:'https://noufa-s-kitchen.vercel.app/',
+      clientbase:'https://portfolio-2-0-eta-lac.vercel.app/',
+      kmct:'https://kmct-ietm-28-in-1-register-production.up.railway.app/',
+      yip:'https://yip-9-0.vercel.app/'
+    };
+    D.HOLO_PROJECTS=projects;
+    D.HOLO_LIVE=liveLinks;
+    D.CASES=D.CASES||{};
+    var localCases={
+      aura:['A local build showcased from the supplied project image.','Routine-focused interface concept with a polished product surface.','Local build · Routine system'],
+      logocraft:['A local build showcased from the supplied project image.','Brand-oriented interface concept presented as a finished visual system.','Local build · Brand studio'],
+      scamshield:['A local build showcased from the supplied project image.','Security-oriented AI interface presented as a local product build.','Local build · Security AI'],
+      'project-apex':['A local build showcased from the supplied project image.','A product-oriented system presented through its interface surface.','Local build · Product system'],
+      'culinary-ai':['A local build showcased from the supplied project image.','An AI-oriented culinary interface presented as a local product build.','Local build · AI product']
+    };
+    Object.keys(localCases).forEach(function(k){
+      var c=localCases[k];
+      D.CASES[k]={p:c[0],s:c[1],st:c[2],m:['LOCAL BUILD','IMAGE PREVIEW','NO PUBLIC URL PROVIDED'],live:false};
+    });
+
+    /* ---------- Global project count / copy repair ---------- */
+    qa(' .sec-count').forEach(function(el){
+      var t=el.textContent;
+      if(/17 BUILDS|14 BUILDS/.test(t) && !/HOLO|ARCHIVE/.test(t)) el.textContent=t.replace(/17 BUILDS|14 BUILDS/,'19 BUILDS');
+    });
+    qa('meta[name="description"],meta[property="og:description"]').forEach(function(el){
+      if(el.content) el.content=el.content.replace(/17 builds/,'19 builds').replace(/14 builds/,'19 builds');
+    });
+    qa('#arsenal .sec-count').forEach(function(el){el.textContent='/ 19 BUILDS · CLICK P-## = CASE STUDY';});
+    qa('#holo .sec-count').forEach(function(el){el.textContent='/ 19 BUILDS · AUTO-SEQUENCE';});
+    qa('#screens .sec-count').forEach(function(el){el.textContent='/ 19 BUILDS · HOVER ROW TO PAUSE · IMAGE FOCUS ONLY';});
+
+    function projectHref(p){
+      if(p[4]==='live') return liveLinks[p[0]]||'#';
+      if(p[4]==='internal') return '#commerce';
+      return '#';
+    }
+    function bindLocal(a,p){
+      if(p[4]==='local'){
+        a.addEventListener('click',function(e){
+          e.preventDefault();
+          if(typeof window.openCase==='function') window.openCase(p[0]);
+        });
+      }else if(p[4]==='internal'){
+        a.addEventListener('click',function(e){e.preventDefault();location.hash='commerce';});
+      }
+    }
+
+    /* ---------- Arsenal: canonical 19-card catalogue ---------- */
+    (function(){
+      var sec=byId('arsenal'); if(!sec)return;
+      var toolsOld=byId('arsTools');
+      if(toolsOld){
+        var tools=toolsOld.cloneNode(false);
+        tools.id='arsTools';
+        tools.className='v14-ars-tools';
+        tools.innerHTML=[
+          '<button class="v14-ars-filter is-active" data-f="all" type="button">ALL</button>',
+          '<button class="v14-ars-filter" data-f="tools" type="button">TOOLS</button>',
+          '<button class="v14-ars-filter" data-f="ai" type="button">AI</button>',
+          '<button class="v14-ars-filter" data-f="commerce" type="button">COMMERCE</button>',
+          '<button class="v14-ars-filter" data-f="edtech" type="button">EDTECH</button>',
+          '<button class="v14-ars-filter" data-f="client" type="button">CLIENT</button>',
+          '<input class="v14-ars-search" id="arsSearchV14" placeholder="SEARCH THE ARSENAL..." type="search" autocomplete="off">'
+        ].join('');
+        toolsOld.parentNode.replaceChild(tools,toolsOld);
+      }
+      var holder=sec.querySelector('.arsenal');
+      if(!holder)return;
+      holder.className='v14-arsenal';
+      holder.innerHTML='';
+      function category(p){
+        if(['nova','studyflow','aura','scamshield','culinary-ai'].indexOf(p[0])>-1)return 'ai';
+        if(['noufa','sunora'].indexOf(p[0])>-1)return 'commerce';
+        if(['quizcraft','classroom'].indexOf(p[0])>-1)return 'edtech';
+        if(['clientbase','kmct'].indexOf(p[0])>-1)return 'client';
+        return 'tools';
+      }
+      projects.forEach(function(p,i){
+        var a=document.createElement('a');
+        a.className='v14-ars-card';
+        a.dataset.f=category(p);
+        a.dataset.key=p[0];
+        a.href=projectHref(p);
+        if(p[4]==='live'){a.target='_blank';a.rel='noopener'}
+        var status=p[4]==='live'?'LIVE':(p[4]==='internal'?'INTERNAL':'LOCAL');
+        a.innerHTML=
+          '<span class="v14-ars-thumb"><img src="'+p[3]+'" alt="'+p[1]+' interface" loading="'+(i<4?'eager':'lazy')+'" decoding="async"><span class="v14-ars-code">P-'+String(i+1).padStart(2,'0')+'</span></span>'+
+          '<span class="v14-ars-body"><span class="v14-ars-top">'+status+' · '+p[2]+'</span><span class="v14-ars-name">'+p[1]+'</span><span class="v14-ars-sub">'+(p[4]==='local'?'LOCAL BUILD · IMAGE PREVIEW':p[4]==='internal'?'INTERNAL EXPERIENCE':'LIVE SYSTEM')+'</span></span>'+
+          '<span class="v14-ars-go">'+(p[4]==='internal'?'↓':p[4]==='local'?'→':'↗')+'</span>';
+        bindLocal(a,p);
+        holder.appendChild(a);
+      });
+      var filter=byId('arsTools'), search=byId('arsSearchV14');
+      function apply(){
+        var active=filter&&filter.querySelector('.is-active');
+        var f=active?active.dataset.f:'all', q=search?(search.value||'').trim().toLowerCase():'';
+        qa('.v14-ars-card',holder).forEach(function(card){
+          var ok=(f==='all'||card.dataset.f===f)&&(!q||card.textContent.toLowerCase().indexOf(q)>-1);
+          card.hidden=!ok;
+        });
+      }
+      if(filter){
+        filter.addEventListener('click',function(e){
+          var b=e.target.closest('.v14-ars-filter');if(!b)return;
+          qa('.v14-ars-filter',filter).forEach(function(x){x.classList.remove('is-active')});
+          b.classList.add('is-active');apply();
+        });
+      }
+      if(search)search.addEventListener('input',apply);
+    })();
+
+    /* ---------- Holo Deck: one lightweight deterministic runway ---------- */
+    (function(){
+      var sec=byId('holo'); if(!sec)return;
+      sec.className='sec v14-holo';
+      var old=sec.innerHTML;
+      sec.innerHTML='';
+      var wrap=document.createElement('div'); wrap.className='wrap';
+      wrap.innerHTML=
+        '<div class="v14-holo-head"><span class="v14-holo-kicker">03.5 · AUTO RUNWAY</span><span class="v14-holo-rule"></span><span class="v14-holo-count">19 BUILDS · IMAGE-ONLY</span></div>'+
+        '<div class="v14-holo-viewport" id="holoViewport"></div>'+
+        '<div class="v14-holo-meta"><div class="v14-holo-meta-main"><div class="v14-holo-meta-title" id="v14HoloTitle"></div><div class="v14-holo-meta-sub" id="v14HoloSub"></div></div><div class="v14-holo-meta-status"><i></i><span id="v14HoloStatus">BUILD 01 / 19</span></div></div>'+
+        '<div class="v14-holo-hint">AUTO-SEQUENCE · HOLDS 3.0s · NO POINTER / WHEEL / TOUCH CONTROL · CLICK ACTIVE BUILD</div>';
+      sec.appendChild(wrap);
+      var viewport=byId('holoViewport'), cards=[], current=0, timer=null, moving=false;
+      var desktopMQ=window.matchMedia('(min-width:761px)');
+      function rel(i){
+        var d=i-current, half=projects.length/2;
+        if(d>half)d-=projects.length;
+        if(d<-half)d+=projects.length;
+        return d;
+      }
+      function layout(instant){
+        var mobile=!desktopMQ.matches;
+        var step=mobile?window.innerWidth*.92:Math.min(430,Math.max(320,window.innerWidth*.29));
+        var scaleSide=mobile?0.92:0.88;
+        var showRadius=mobile?0:1;
+        cards.forEach(function(card,i){
+          var d=rel(i), ad=Math.abs(d), vis=ad<=showRadius;
+          var x=d*step, z=d===0?130:(ad===1?15:-35), y=d===0?0:(ad===1?8:16);
+          var scale=d===0?1:(ad===1?scaleSide:.76);
+          var rot=d===0?0:(d<0?6:-6);
+          var op=mobile?(ad===0?1:0):(d===0?1:(ad===1?.62:.22));
+          card.style.transition=instant?'none':'';
+          card.style.opacity=vis?op:0;
+          card.style.filter=d===0?'none':(ad===1?'blur(.2px)':'blur(1.2px)');
+          card.style.zIndex=String(100-ad*10+(d===0?10:0));
+          card.style.pointerEvents=d===0?'auto':'none';
+          card.style.transform='translate3d(calc(-50% + '+x+'px),calc(-50% + '+y+'px),'+z+'px) rotateY('+rot+'deg) scale('+scale+')';
+          card.classList.toggle('is-active',d===0);
+          if(!vis)card.setAttribute('aria-hidden','true');else card.removeAttribute('aria-hidden');
+        });
+        var p=projects[current];
+        byId('v14HoloTitle').textContent=p[1];
+        byId('v14HoloSub').textContent=p[2]+' · '+(p[4]==='live'?'LIVE SYSTEM':p[4]==='internal'?'INTERNAL EXPERIENCE':'LOCAL BUILD');
+        byId('v14HoloStatus').textContent='BUILD '+String(current+1).padStart(2,'0')+' / '+projects.length;
+        requestAnimationFrame(function(){cards.forEach(function(c){if(c.style.transition==='none')c.style.transition='';});});
+      }
+      function arm(){
+        clearTimeout(timer);
+        if(document.hidden)return;
+        timer=setTimeout(function(){
+          current=(current+1)%projects.length;
+          layout(false);
+          arm();
+        },3000);
+      }
+      projects.forEach(function(p,i){
+        var a=document.createElement('a');
+        a.className='v14-holo-card';
+        a.href=projectHref(p);
+        a.dataset.key=p[0];
+        if(p[4]==='live'){a.target='_blank';a.rel='noopener'}
+        a.innerHTML='<span class="v14-card-top"><span class="v14-dots"><i></i><i></i><i></i></span><span>P-'+String(i+1).padStart(2,'0')+'</span></span><img src="'+p[3]+'" alt="'+p[1]+' project preview" loading="'+(i<3?'eager':'lazy')+'" decoding="async"><span class="v14-card-bottom"><span class="v14-card-index">'+String(i+1).padStart(2,'0')+' / 19</span><span class="v14-card-title">'+p[1]+'</span><span class="v14-card-sub">'+p[2]+' · '+(p[4]==='local'?'LOCAL BUILD':p[4]==='internal'?'INTERNAL EXPERIENCE':'LIVE ↗')+'</span></span>';
+        bindLocal(a,p);
+        viewport.appendChild(a);cards.push(a);
+      });
+      layout(true);arm();
+      var onVis=function(){ if(document.hidden){clearTimeout(timer);timer=null;} else {layout(true);arm();} };
+      document.addEventListener('visibilitychange',onVis);
+      window.addEventListener('resize',function(){layout(true);arm();},{passive:true});
+      sec.__v14Cleanup=function(){clearTimeout(timer);document.removeEventListener('visibilitychange',onVis)};
+    })();
+
+    /* ---------- Interface Archive: CSS conveyor, row-specific hover pause ---------- */
+    (function(){
+      var sec=byId('screens'); if(!sec)return;
+      var holder=sec.querySelector('.strips'); if(!holder)return;
+      holder.className='v14-archive';
+      holder.innerHTML='';
+      var groups=[projects.slice(0,10),projects.slice(10)];
+      function card(p,i){
+        var a=document.createElement('a');
+        a.className='v14-archive-card';
+        a.href=projectHref(p);
+        if(p[4]==='live'){a.target='_blank';a.rel='noopener'}
+        bindLocal(a,p);
+        var chrome='<span class="v14-archive-chrome"><i></i><i></i><i></i><span class="v14-archive-host">'+(p[4]==='live'&&liveLinks[p[0]]?liveLinks[p[0]].replace(/^https?:\/\//,'').replace(/\/$/,''):p[1].toLowerCase()+' · local')+'</span></span>';
+        a.innerHTML='<span class="v14-archive-media">'+chrome+'<img src="'+p[3]+'" alt="'+p[1]+' interface" loading="lazy" decoding="async"></span><span class="v14-archive-cap"><b>'+p[1]+'</b><span>'+p[2]+'</span></span>';
+        return a;
+      }
+      groups.forEach(function(group,idx){
+        var row=document.createElement('div');
+        row.className='v14-archive-row'+(idx===1?' reverse':'');
+        var track=document.createElement('div');track.className='v14-archive-track';
+        group.forEach(function(p,i){track.appendChild(card(p,i))});
+        group.forEach(function(p,i){var c=card(p,i);c.setAttribute('aria-hidden','true');c.tabIndex=-1;track.appendChild(c)});
+        row.appendChild(track);holder.appendChild(row);
+        row.addEventListener('mouseenter',function(){row.classList.add('is-paused')},{passive:true});
+        row.addEventListener('mouseleave',function(){row.classList.remove('is-paused')},{passive:true});
+        var io=new IntersectionObserver(function(es){es.forEach(function(e){row.classList.toggle('is-paused',!e.isIntersecting)})},{threshold:.01});
+        io.observe(row);
+      });
+    })();
+
+    /* ---------- Build Engine: keep the concept but make its project strip canonical ---------- */
+    (function(){
+      var strip=byId('buildProjectStrip'); if(!strip)return;
+      strip.innerHTML='';
+      projects.forEach(function(p,i){
+        var b=document.createElement('button');
+        b.type='button'; b.className='build-project-chip'+(i===0?' active':'');
+        b.dataset.key=p[0];
+        b.innerHTML='<img src="'+p[3]+'" alt="" loading="lazy" decoding="async"><span>'+p[1]+'</span>';
+        b.addEventListener('click',function(){
+          var img=byId('buildProjectImage'),name=byId('buildProjectName'),kind=byId('buildProjectKind'),sel=byId('buildSelected');
+          if(img){img.src=p[3];img.alt=p[1]+' preview'}
+          if(name)name.textContent=p[1];
+          if(kind)kind.textContent=p[2]+' · '+(p[4]==='local'?'LOCAL BUILD':p[4]==='internal'?'INTERNAL EXPERIENCE':'LIVE SYSTEM');
+          if(sel)sel.textContent=p[1];
+          qa('.build-project-chip',strip).forEach(function(x){x.classList.toggle('active',x===b)});
+        });
+        strip.appendChild(b);
+      });
+    })();
+
+    /* ---------- Mobile image/performance pass ---------- */
+    (function(){
+      var imgs=qa('img');
+      imgs.forEach(function(img,i){
+        img.decoding='async';
+        if(i>3 && !img.hasAttribute('loading')) img.loading='lazy';
+      });
+      if(window.__UMER_PERF_LITE){
+        document.documentElement.classList.add('perf-lite');
+        qa('.build-ambient,.cruc-bg,.cruc-p').forEach(function(el){el.style.animation='none'});
+        var identity=byId('identity'); if(identity)identity.classList.add('v14-build-engine-lite');
+      }
+    })();
+  });
+})();
+</script>
 </body>
 </html>
 

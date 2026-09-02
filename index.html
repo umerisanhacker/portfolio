@@ -1453,9 +1453,6 @@ max-width:1000px}
   #life .tl-item{transition:none!important}
 }
 </style>
-
-<script id="v17-life-timeline-runtime">/* superseded by v18 authoritative timeline controller */</script>
-
 <style id="v18-authoritative-interaction-fix">
 /* V18: final interaction owner. This layer intentionally comes last so older
    experimental controllers cannot override the three repaired areas. */
@@ -1611,34 +1608,6 @@ max-width:1000px}
   }
 
   onReady(function(){
-    /* ============================================================
-       YEAR TIMELINE — reference motion / one scroll owner
-       ============================================================ */
-    var life=document.getElementById('life'), track=document.getElementById('tlTrack');
-    if(life&&track){
-      var lifeTick=0;
-      function renderLifeReference(){
-        lifeTick=0;
-        var sticky=track.parentElement;
-        var r=sticky.getBoundingClientRect();
-        if(r.top<innerHeight && r.bottom>0){
-          var wrapR=sticky.parentElement.getBoundingClientRect();
-          var span=Math.max(1,wrapR.height-innerHeight);
-          var p=clamp(-wrapR.top/span,0,1);
-          var max=Math.max(0,track.scrollWidth-innerWidth);
-          track.style.setProperty('transform','translate3d('+(-p*max).toFixed(2)+'px,0,0)','important');
-        }
-      }
-      function scheduleLifeReference(){
-        if(lifeTick)return;
-        lifeTick=requestAnimationFrame(renderLifeReference);
-      }
-      addEventListener('scroll',scheduleLifeReference,{passive:true});
-      addEventListener('resize',scheduleLifeReference,{passive:true});
-      addEventListener('load',scheduleLifeReference,{once:true});
-      scheduleLifeReference();
-    }
-
     /* ============================================================
        CERTIFICATE VAULT — arrows + real touch/pointer swipe
        ============================================================ */
@@ -1862,31 +1831,16 @@ html,body{overscroll-behavior-y:auto!important}
 }
 </style>
 
-<script id="wheel-scroll-through-interactive-surfaces">
-(function(){
-  'use strict';
-  function scrollThroughInteractiveSurface(e){
-    if(e.ctrlKey)return;
-    var t=e.target;
-    var inside=t&&t.closest&&t.closest('#screens, #life');
-    if(!inside || !e.deltaY)return;
-    e.preventDefault();
-    window.scrollBy(0,e.deltaY);
-  }
-  document.addEventListener('wheel',scrollThroughInteractiveSurface,{passive:false,capture:true});
-})();
-</script>
-
-<style id="v19-timeline-scroll-authoritative">
-/* V19 — timeline is a true 1:1 vertical-scroll -> horizontal-scroll runway. */
+<style id="timeline-smooth-final">
+/* One authoritative timeline renderer. Older experimental timeline controllers
+   are removed so there is exactly one writer for #tlTrack's transform. */
 #life{
   position:relative!important;
   width:100%!important;
-  height:auto!important;
+  height:300vh!important;
   min-height:100vh!important;
-  overflow:visible!important; /* critical: sticky must not be trapped by an overflow container */
+  overflow:visible!important;
   isolation:isolate!important;
-  z-index:1!important;
 }
 #life .tl-sticky{
   position:sticky!important;
@@ -1900,7 +1854,7 @@ html,body{overscroll-behavior-y:auto!important}
   overflow:hidden!important;
   box-sizing:border-box!important;
   isolation:isolate!important;
-  overscroll-behavior:contain!important;
+  transform:none!important;
 }
 #life .tl-track{
   position:relative!important;
@@ -1913,11 +1867,10 @@ html,body{overscroll-behavior-y:auto!important}
   min-width:max-content!important;
   padding:0 10vw!important;
   margin:0!important;
-  left:auto!important;
-  right:auto!important;
   transform:translate3d(0,0,0)!important;
-  will-change:transform!important;
   transition:none!important;
+  will-change:transform!important;
+  backface-visibility:hidden!important;
 }
 #life .tl-item{
   flex:0 0 400px!important;
@@ -1938,157 +1891,7 @@ html,body{overscroll-behavior-y:auto!important}
   background:linear-gradient(180deg,rgba(24,36,60,.96),rgba(12,19,35,.985))!important;
   box-shadow:none!important;
   transition:none!important;
-}
-#life .tl-item::before{display:none!important}
-#life .tl-item::after{display:none!important}
-#life .tl-item .y{
-  position:static!important;
-  display:block!important;
-  margin:0 0 28px!important;
-  font-family:var(--disp)!important;
-  font-weight:900!important;
-  font-size:2.15rem!important;
-  line-height:.9!important;
-  letter-spacing:-.03em!important;
-  color:var(--acid)!important;
-}
-#life .tl-item h4{
-  position:static!important;
-  margin:0 0 12px!important;
-  max-width:none!important;
-  font-size:.9rem!important;
-  line-height:1.1!important;
-  white-space:nowrap!important;
-}
-#life .tl-item p{
-  position:static!important;
-  margin:0!important;
-  max-width:none!important;
-  font-size:.74rem!important;
-  line-height:1.45!important;
-  color:var(--dim)!important;
-}
-@media(max-width:700px){
-  #life .tl-track{gap:18px!important;padding:0 9vw!important}
-  #life .tl-item{
-    flex-basis:82vw!important;
-    width:82vw!important;
-    min-width:82vw!important;
-    height:184px!important;
-    min-height:184px!important;
-    max-height:184px!important;
-    padding:22px 20px!important;
-  }
-  #life .tl-item .y{font-size:2rem!important;margin-bottom:22px!important}
-  #life .tl-item h4{font-size:.78rem!important;margin-bottom:9px!important}
-  #life .tl-item p{font-size:.68rem!important}
-}
-</style>
-<script id="v19-timeline-scroll-authoritative">
-(function(){
-  'use strict';
-  var started=false, raf=0;
-  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
-  function init(){
-    if(started)return;
-    var life=document.getElementById('life');
-    var track=document.getElementById('tlTrack');
-    if(!life||!track)return;
-    started=true;
-
-    function measure(){
-      /* Force the compact reference layout before measuring horizontal travel. */
-      track.style.setProperty('transform','translate3d(0,0,0)','important');
-      var max=Math.max(0,track.scrollWidth-window.innerWidth);
-      /* Exactly one vertical pixel of page travel = one horizontal pixel. */
-      life.style.setProperty('height',(window.innerHeight+max)+'px','important');
-      render();
-    }
-
-    function render(){
-      raf=0;
-      var max=Math.max(0,track.scrollWidth-window.innerWidth);
-      var span=Math.max(1,life.offsetHeight-window.innerHeight);
-      var rect=life.getBoundingClientRect();
-      var p=clamp(-rect.top/span,0,1);
-      var x=-p*max;
-      track.style.setProperty('transform','translate3d('+x.toFixed(2)+'px,0,0)','important');
-    }
-    function schedule(){
-      if(raf)return;
-      raf=requestAnimationFrame(render);
-    }
-
-    addEventListener('scroll',schedule,{passive:true});
-    addEventListener('resize',measure,{passive:true});
-    addEventListener('load',measure,{once:true});
-    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
-    requestAnimationFrame(function(){requestAnimationFrame(measure);});
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
-  else init();
-})();
-</script>
-
-<style id="v20-timeline-deterministic-scroll">
-/* V20 — no CSS sticky dependency. The timeline is pinned by a tiny scroll-position
-   controller, so transforms cannot drift or become desynchronised from page scroll. */
-#life{
-  position:relative!important;
-  height:auto!important;
-  min-height:100vh!important;
-  overflow:visible!important;
-  isolation:isolate!important;
-}
-#life .tl-sticky{
-  position:absolute!important;
-  left:0!important;
-  top:0!important;
-  width:100%!important;
-  height:100vh!important;
-  height:100svh!important;
-  display:flex!important;
-  align-items:center!important;
-  overflow:hidden!important;
-  box-sizing:border-box!important;
-  contain:none!important;
-  transform:translate3d(0,0,0)!important;
-  will-change:transform!important;
-}
-#life .tl-track{
-  position:relative!important;
-  flex:0 0 auto!important;
-  display:flex!important;
-  flex-wrap:nowrap!important;
-  align-items:center!important;
-  gap:78px!important;
-  width:max-content!important;
-  min-width:max-content!important;
-  padding:0 10vw!important;
-  margin:0!important;
-  transform:translate3d(0,0,0)!important;
-  transition:none!important;
-  will-change:transform!important;
-}
-#life .tl-item{
-  flex:0 0 400px!important;
-  width:400px!important;
-  min-width:400px!important;
-  height:186px!important;
-  min-height:186px!important;
-  max-height:186px!important;
-  box-sizing:border-box!important;
-  display:block!important;
-  position:relative!important;
-  padding:26px 24px!important;
-  margin:0!important;
-  overflow:hidden!important;
-  opacity:1!important;
-  transform:none!important;
-  border:1px solid rgba(220,230,255,.22)!important;
-  background:linear-gradient(180deg,rgba(24,36,60,.96),rgba(12,19,35,.985))!important;
-  box-shadow:none!important;
-  transition:none!important;
+  backface-visibility:hidden!important;
 }
 #life .tl-item::before,#life .tl-item::after{display:none!important}
 #life .tl-item .y{
@@ -2110,47 +1913,74 @@ html,body{overscroll-behavior-y:auto!important}
   #life .tl-item h4{font-size:.78rem!important;margin-bottom:9px!important}
   #life .tl-item p{font-size:.68rem!important}
 }
+@media(prefers-reduced-motion:reduce){#life .tl-track{will-change:auto!important}}
 </style>
-<script id="v20-timeline-deterministic-scroll">
+<script id="timeline-smooth-final">
 (function(){
   'use strict';
-  var life,track,raf=0,ready=false;
+  var life,track,sticky,raf=0,measured=false;
+  var target=0,current=0,lastTime=0;
+  var topY=0,run=1,maxX=0,vh=0;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+
+  function measure(initial){
+    if(!life||!track)return;
+    var old=track.style.transform;
+    track.style.setProperty('transform','translate3d(0,0,0)','important');
+    /* scrollWidth is now the real, untransformed track width. */
+    maxX=Math.max(0,track.scrollWidth-window.innerWidth);
+    vh=Math.max(1,window.innerHeight);
+    run=Math.max(1,vh+maxX-vh); /* vertical runway equals horizontal travel */
+    /* Give the section exactly enough scroll distance to traverse the track. */
+    life.style.setProperty('height',(vh+maxX)+'px','important');
+    topY=life.getBoundingClientRect().top+window.scrollY;
+    measured=true;
+    target=clamp(window.scrollY-topY,0,maxX);
+    if(initial||reduce)current=target;
+    track.style.setProperty('transform','translate3d('+(-current).toFixed(3)+'px,0,0)','important');
+  }
+
+  function schedule(){if(!raf)raf=requestAnimationFrame(render);}
+
+  function render(now){
+    raf=0;
+    if(!measured){measure(true);return;}
+    var distance=clamp(window.scrollY-topY,0,maxX);
+    target=distance;
+    var dt=lastTime?Math.min(64,now-lastTime):16;
+    lastTime=now;
+    if(reduce){current=target;}
+    else{
+      /* ~55ms time constant: smooth wheel/touch quantisation without a visible lag. */
+      var alpha=1-Math.exp(-dt/55);
+      current += (target-current)*alpha;
+      if(Math.abs(target-current)<0.08)current=target;
+    }
+    track.style.setProperty('transform','translate3d('+(-current).toFixed(3)+'px,0,0)','important');
+    if(Math.abs(target-current)>0.08) schedule();
+  }
+
   function init(){
-    if(ready)return;
     life=document.getElementById('life');
     track=document.getElementById('tlTrack');
-    if(!life||!track)return;
-    ready=true;
-    function measure(){
-      /* Measure only after fonts/layout have settled. */
-      track.style.setProperty('transform','translate3d(0,0,0)','important');
-      var max=Math.max(0,track.scrollWidth-window.innerWidth);
-      life.style.setProperty('height',(window.innerHeight+max)+'px','important');
-      render();
-    }
-    function render(){
-      raf=0;
-      if(!life||!track)return;
-      var vh=window.innerHeight;
-      var max=Math.max(0,track.scrollWidth-window.innerWidth);
-      var run=Math.max(1,life.offsetHeight-vh);
-      var lifeTop=life.getBoundingClientRect().top+window.scrollY;
-      var distance=clamp(window.scrollY-lifeTop,0,run);
-      /* Pin the viewport layer without relying on position:sticky. */
-      life.querySelector('.tl-sticky').style.setProperty('transform','translate3d(0,'+distance.toFixed(2)+'px,0)','important');
-      /* Exact 1:1 mapping: scroll down 1px => timeline left 1px. */
-      track.style.setProperty('transform','translate3d('+(-distance*Math.min(1,max/run)).toFixed(2)+'px,0,0)','important');
-    }
-    function schedule(){if(raf)return;raf=requestAnimationFrame(render);}
+    sticky=life&&life.querySelector('.tl-sticky');
+    if(!life||!track||!sticky)return;
+    measure(true);
     addEventListener('scroll',schedule,{passive:true});
-    addEventListener('resize',measure,{passive:true});
-    addEventListener('load',measure,{once:true});
-    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
-    requestAnimationFrame(function(){requestAnimationFrame(measure);});
+    addEventListener('resize',function(){measure(false);schedule();},{passive:true});
+    if(window.visualViewport)window.visualViewport.addEventListener('resize',function(){measure(false);schedule();},{passive:true});
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){measure(false);schedule();});
+    if(window.ResizeObserver){
+      var ro=new ResizeObserver(function(){measure(false);schedule();});
+      ro.observe(track);ro.observe(life);
+    }
+    requestAnimationFrame(function(){measure(false);schedule();});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
+
 </body>
 </html>

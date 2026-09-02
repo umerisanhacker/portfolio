@@ -1876,5 +1876,281 @@ html,body{overscroll-behavior-y:auto!important}
   document.addEventListener('wheel',scrollThroughInteractiveSurface,{passive:false,capture:true});
 })();
 </script>
+
+<style id="v19-timeline-scroll-authoritative">
+/* V19 — timeline is a true 1:1 vertical-scroll -> horizontal-scroll runway. */
+#life{
+  position:relative!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:100vh!important;
+  overflow:visible!important; /* critical: sticky must not be trapped by an overflow container */
+  isolation:isolate!important;
+  z-index:1!important;
+}
+#life .tl-sticky{
+  position:sticky!important;
+  top:0!important;
+  width:100%!important;
+  height:100vh!important;
+  height:100svh!important;
+  min-height:0!important;
+  display:flex!important;
+  align-items:center!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  isolation:isolate!important;
+  overscroll-behavior:contain!important;
+}
+#life .tl-track{
+  position:relative!important;
+  display:flex!important;
+  flex:0 0 auto!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:78px!important;
+  width:max-content!important;
+  min-width:max-content!important;
+  padding:0 10vw!important;
+  margin:0!important;
+  left:auto!important;
+  right:auto!important;
+  transform:translate3d(0,0,0)!important;
+  will-change:transform!important;
+  transition:none!important;
+}
+#life .tl-item{
+  flex:0 0 400px!important;
+  width:400px!important;
+  min-width:400px!important;
+  height:186px!important;
+  min-height:186px!important;
+  max-height:186px!important;
+  box-sizing:border-box!important;
+  position:relative!important;
+  display:block!important;
+  padding:26px 24px!important;
+  margin:0!important;
+  overflow:hidden!important;
+  opacity:1!important;
+  transform:none!important;
+  border:1px solid rgba(220,230,255,.22)!important;
+  background:linear-gradient(180deg,rgba(24,36,60,.96),rgba(12,19,35,.985))!important;
+  box-shadow:none!important;
+  transition:none!important;
+}
+#life .tl-item::before{display:none!important}
+#life .tl-item::after{display:none!important}
+#life .tl-item .y{
+  position:static!important;
+  display:block!important;
+  margin:0 0 28px!important;
+  font-family:var(--disp)!important;
+  font-weight:900!important;
+  font-size:2.15rem!important;
+  line-height:.9!important;
+  letter-spacing:-.03em!important;
+  color:var(--acid)!important;
+}
+#life .tl-item h4{
+  position:static!important;
+  margin:0 0 12px!important;
+  max-width:none!important;
+  font-size:.9rem!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+#life .tl-item p{
+  position:static!important;
+  margin:0!important;
+  max-width:none!important;
+  font-size:.74rem!important;
+  line-height:1.45!important;
+  color:var(--dim)!important;
+}
+@media(max-width:700px){
+  #life .tl-track{gap:18px!important;padding:0 9vw!important}
+  #life .tl-item{
+    flex-basis:82vw!important;
+    width:82vw!important;
+    min-width:82vw!important;
+    height:184px!important;
+    min-height:184px!important;
+    max-height:184px!important;
+    padding:22px 20px!important;
+  }
+  #life .tl-item .y{font-size:2rem!important;margin-bottom:22px!important}
+  #life .tl-item h4{font-size:.78rem!important;margin-bottom:9px!important}
+  #life .tl-item p{font-size:.68rem!important}
+}
+</style>
+<script id="v19-timeline-scroll-authoritative">
+(function(){
+  'use strict';
+  var started=false, raf=0;
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function init(){
+    if(started)return;
+    var life=document.getElementById('life');
+    var track=document.getElementById('tlTrack');
+    if(!life||!track)return;
+    started=true;
+
+    function measure(){
+      /* Force the compact reference layout before measuring horizontal travel. */
+      track.style.setProperty('transform','translate3d(0,0,0)','important');
+      var max=Math.max(0,track.scrollWidth-window.innerWidth);
+      /* Exactly one vertical pixel of page travel = one horizontal pixel. */
+      life.style.setProperty('height',(window.innerHeight+max)+'px','important');
+      render();
+    }
+
+    function render(){
+      raf=0;
+      var max=Math.max(0,track.scrollWidth-window.innerWidth);
+      var span=Math.max(1,life.offsetHeight-window.innerHeight);
+      var rect=life.getBoundingClientRect();
+      var p=clamp(-rect.top/span,0,1);
+      var x=-p*max;
+      track.style.setProperty('transform','translate3d('+x.toFixed(2)+'px,0,0)','important');
+    }
+    function schedule(){
+      if(raf)return;
+      raf=requestAnimationFrame(render);
+    }
+
+    addEventListener('scroll',schedule,{passive:true});
+    addEventListener('resize',measure,{passive:true});
+    addEventListener('load',measure,{once:true});
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
+    requestAnimationFrame(function(){requestAnimationFrame(measure);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+})();
+</script>
+
+<style id="v20-timeline-deterministic-scroll">
+/* V20 — no CSS sticky dependency. The timeline is pinned by a tiny scroll-position
+   controller, so transforms cannot drift or become desynchronised from page scroll. */
+#life{
+  position:relative!important;
+  height:auto!important;
+  min-height:100vh!important;
+  overflow:visible!important;
+  isolation:isolate!important;
+}
+#life .tl-sticky{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:100%!important;
+  height:100vh!important;
+  height:100svh!important;
+  display:flex!important;
+  align-items:center!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  contain:none!important;
+  transform:translate3d(0,0,0)!important;
+  will-change:transform!important;
+}
+#life .tl-track{
+  position:relative!important;
+  flex:0 0 auto!important;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:78px!important;
+  width:max-content!important;
+  min-width:max-content!important;
+  padding:0 10vw!important;
+  margin:0!important;
+  transform:translate3d(0,0,0)!important;
+  transition:none!important;
+  will-change:transform!important;
+}
+#life .tl-item{
+  flex:0 0 400px!important;
+  width:400px!important;
+  min-width:400px!important;
+  height:186px!important;
+  min-height:186px!important;
+  max-height:186px!important;
+  box-sizing:border-box!important;
+  display:block!important;
+  position:relative!important;
+  padding:26px 24px!important;
+  margin:0!important;
+  overflow:hidden!important;
+  opacity:1!important;
+  transform:none!important;
+  border:1px solid rgba(220,230,255,.22)!important;
+  background:linear-gradient(180deg,rgba(24,36,60,.96),rgba(12,19,35,.985))!important;
+  box-shadow:none!important;
+  transition:none!important;
+}
+#life .tl-item::before,#life .tl-item::after{display:none!important}
+#life .tl-item .y{
+  display:block!important;
+  margin:0 0 28px!important;
+  font-family:var(--disp)!important;
+  font-weight:900!important;
+  font-size:2.15rem!important;
+  line-height:.9!important;
+  letter-spacing:-.03em!important;
+  color:var(--acid)!important;
+}
+#life .tl-item h4{margin:0 0 12px!important;max-width:none!important;font-size:.9rem!important;line-height:1.1!important;white-space:nowrap!important}
+#life .tl-item p{margin:0!important;max-width:none!important;font-size:.74rem!important;line-height:1.45!important;color:var(--dim)!important}
+@media(max-width:700px){
+  #life .tl-track{gap:18px!important;padding:0 9vw!important}
+  #life .tl-item{flex-basis:82vw!important;width:82vw!important;min-width:82vw!important;height:184px!important;min-height:184px!important;max-height:184px!important;padding:22px 20px!important}
+  #life .tl-item .y{font-size:2rem!important;margin-bottom:22px!important}
+  #life .tl-item h4{font-size:.78rem!important;margin-bottom:9px!important}
+  #life .tl-item p{font-size:.68rem!important}
+}
+</style>
+<script id="v20-timeline-deterministic-scroll">
+(function(){
+  'use strict';
+  var life,track,raf=0,ready=false;
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function init(){
+    if(ready)return;
+    life=document.getElementById('life');
+    track=document.getElementById('tlTrack');
+    if(!life||!track)return;
+    ready=true;
+    function measure(){
+      /* Measure only after fonts/layout have settled. */
+      track.style.setProperty('transform','translate3d(0,0,0)','important');
+      var max=Math.max(0,track.scrollWidth-window.innerWidth);
+      life.style.setProperty('height',(window.innerHeight+max)+'px','important');
+      render();
+    }
+    function render(){
+      raf=0;
+      if(!life||!track)return;
+      var vh=window.innerHeight;
+      var max=Math.max(0,track.scrollWidth-window.innerWidth);
+      var run=Math.max(1,life.offsetHeight-vh);
+      var lifeTop=life.getBoundingClientRect().top+window.scrollY;
+      var distance=clamp(window.scrollY-lifeTop,0,run);
+      /* Pin the viewport layer without relying on position:sticky. */
+      life.querySelector('.tl-sticky').style.setProperty('transform','translate3d(0,'+distance.toFixed(2)+'px,0)','important');
+      /* Exact 1:1 mapping: scroll down 1px => timeline left 1px. */
+      track.style.setProperty('transform','translate3d('+(-distance*Math.min(1,max/run)).toFixed(2)+'px,0,0)','important');
+    }
+    function schedule(){if(raf)return;raf=requestAnimationFrame(render);}
+    addEventListener('scroll',schedule,{passive:true});
+    addEventListener('resize',measure,{passive:true});
+    addEventListener('load',measure,{once:true});
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
+    requestAnimationFrame(function(){requestAnimationFrame(measure);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body>
 </html>

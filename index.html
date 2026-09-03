@@ -1918,69 +1918,179 @@ html,body{overscroll-behavior-y:auto!important}
 <script id="timeline-smooth-final">
 (function(){
   'use strict';
-  var life,track,sticky,raf=0,measured=false;
-  var target=0,current=0,lastTime=0;
-  var topY=0,run=1,maxX=0,vh=0;
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
-
-  function measure(initial){
+  function ready(fn){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fn,{once:true});else fn();}
+  ready(function(){
+    var life=document.getElementById('life'), track=document.getElementById('tlTrack');
     if(!life||!track)return;
-    var old=track.style.transform;
-    track.style.setProperty('transform','translate3d(0,0,0)','important');
-    /* scrollWidth is now the real, untransformed track width. */
-    maxX=Math.max(0,track.scrollWidth-window.innerWidth);
-    vh=Math.max(1,window.innerHeight);
-    run=Math.max(1,vh+maxX-vh); /* vertical runway equals horizontal travel */
-    /* Give the section exactly enough scroll distance to traverse the track. */
-    life.style.setProperty('height',(vh+maxX)+'px','important');
-    topY=life.getBoundingClientRect().top+window.scrollY;
-    measured=true;
-    target=clamp(window.scrollY-topY,0,maxX);
-    if(initial||reduce)current=target;
-    track.style.setProperty('transform','translate3d('+(-current).toFixed(3)+'px,0,0)','important');
-  }
-
-  function schedule(){if(!raf)raf=requestAnimationFrame(render);}
-
-  function render(now){
-    raf=0;
-    if(!measured){measure(true);return;}
-    var distance=clamp(window.scrollY-topY,0,maxX);
-    target=distance;
-    var dt=lastTime?Math.min(64,now-lastTime):16;
-    lastTime=now;
-    if(reduce){current=target;}
-    else{
-      /* ~55ms time constant: smooth wheel/touch quantisation without a visible lag. */
-      var alpha=1-Math.exp(-dt/55);
-      current += (target-current)*alpha;
-      if(Math.abs(target-current)<0.08)current=target;
+    var mobile=window.matchMedia('(max-width:700px)').matches || ('ontouchstart' in window);
+    var raf=0, maxX=0, topY=0, lastWidth=0, lastHeight=0;
+    function measure(){
+      if(!life||!track)return;
+      track.style.setProperty('transform','translate3d(0,0,0)','important');
+      var rect=track.getBoundingClientRect();
+      maxX=Math.max(0, track.scrollWidth - Math.max(1,window.innerWidth));
+      var vh=Math.max(1,window.innerHeight);
+      /* Exact runway: the sticky viewport lasts exactly as long as horizontal travel. */
+      life.style.setProperty('height',(vh+maxX)+'px','important');
+      topY=life.getBoundingClientRect().top+window.scrollY;
+      lastWidth=window.innerWidth; lastHeight=window.innerHeight;
+      render();
     }
-    track.style.setProperty('transform','translate3d('+(-current).toFixed(3)+'px,0,0)','important');
-    if(Math.abs(target-current)>0.08) schedule();
-  }
-
-  function init(){
-    life=document.getElementById('life');
-    track=document.getElementById('tlTrack');
-    sticky=life&&life.querySelector('.tl-sticky');
-    if(!life||!track||!sticky)return;
-    measure(true);
+    function render(){
+      raf=0;
+      if(!life||!track)return;
+      var y=window.scrollY || document.documentElement.scrollTop || 0;
+      var x=clamp(y-topY,0,maxX);
+      /* Mobile deliberately uses direct mapping: native touch scrolling already supplies
+         the smoothing. Adding JS interpolation here creates visible lag/buffering. */
+      track.style.setProperty('transform','translate3d('+(-x).toFixed(2)+'px,0,0)','important');
+    }
+    function schedule(){if(!raf)raf=requestAnimationFrame(render);}
+    function resize(){
+      if(window.innerWidth!==lastWidth || Math.abs(window.innerHeight-lastHeight)>2) measure();
+      else schedule();
+    }
+    measure();
     addEventListener('scroll',schedule,{passive:true});
-    addEventListener('resize',function(){measure(false);schedule();},{passive:true});
-    if(window.visualViewport)window.visualViewport.addEventListener('resize',function(){measure(false);schedule();},{passive:true});
-    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){measure(false);schedule();});
+    addEventListener('resize',resize,{passive:true});
+    if(window.visualViewport)window.visualViewport.addEventListener('resize',resize,{passive:true});
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
     if(window.ResizeObserver){
-      var ro=new ResizeObserver(function(){measure(false);schedule();});
-      ro.observe(track);ro.observe(life);
+      var ro=new ResizeObserver(function(){measure();});
+      ro.observe(track);
     }
-    requestAnimationFrame(function(){measure(false);schedule();});
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+    requestAnimationFrame(measure);
+  });
 })();
 </script>
 
+<style id="mobile-performance-final">
+/* ============================================================
+   MOBILE PERFORMANCE / INTERACTION HARDENING
+   This layer intentionally removes GPU-heavy 3D/filter effects from
+   the two scroll-sensitive surfaces: certificates + life timeline.
+   ============================================================ */
+@media (max-width:700px){
+  html,body{scroll-behavior:auto!important;overscroll-behavior-y:auto!important}
+  #life{overflow:visible!important;contain:none!important;isolation:auto!important;touch-action:pan-y!important}
+  #life .tl-sticky{
+    position:sticky!important;top:0!important;height:100svh!important;min-height:0!important;
+    overflow:hidden!important;clip-path:inset(0)!important;contain:none!important;
+    isolation:auto!important;touch-action:pan-y!important;
+  }
+  #life .tl-track{will-change:transform!important;transform-style:flat!important;backface-visibility:hidden!important}
+  #life .tl-item{transform:none!important;filter:none!important;box-shadow:none!important}
+
+  /* Certificate vault: single-card 2D compositor path on phones. */
+  #cvStage{height:clamp(430px,118vw,560px)!important;touch-action:pan-y!important;overflow:hidden!important;contain:paint!important}
+  #cvStage .cv-glow,#cvStage .cv-orbit{display:none!important}
+  #cvStage .cv-track{perspective:none!important;transform-style:flat!important;will-change:auto!important}
+  #cvStage .cv-card{
+    width:calc(100% - 34px)!important;min-width:0!important;height:calc(100% - 92px)!important;
+    min-height:0!important;max-height:none!important;left:50%!important;top:46%!important;
+    transform-style:flat!important;backface-visibility:hidden!important;
+    filter:none!important;transition:transform .32s cubic-bezier(.22,.61,.36,1),opacity .24s ease!important;
+    box-shadow:0 18px 50px rgba(0,0,0,.34)!important;
+  }
+  #cvStage .cv-card.is-active{filter:none!important;opacity:1!important}
+  #cvStage .cv-card.is-prev,#cvStage .cv-card.is-next,#cvStage .cv-card.is-far{
+    filter:none!important;opacity:0!important;pointer-events:none!important;
+    transform:translate3d(-50%,-50%,0) scale(.985)!important;
+  }
+  #cvStage .cv-card-image{box-shadow:none!important}
+  #cvStage .cv-card-image img{image-rendering:auto!important;transform:none!important}
+  #cvStage .cv-nav{width:42px!important;height:42px!important;z-index:100!important}
+  #cvStage .cv-prev{left:8px!important}.cv-next{right:8px!important}
+  #cvStage .cv-hud{bottom:8px!important;min-width:150px!important}
+
+  /* Kill expensive page-wide backdrop blurs on small screens. */
+  .cv-modal{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(4,7,13,.96)!important}
+  [style*="backdrop-filter"],.nav,.menu-panel{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+}
+@media (prefers-reduced-motion:reduce){
+  #cvStage .cv-card{transition:none!important}
+}
+</style>
+<script id="mobile-stability-final">
+(function(){
+  'use strict';
+  function ready(fn){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fn,{once:true});else fn();}
+  ready(function(){
+    var stage=document.getElementById('cvStage'), track=document.getElementById('cvTrack');
+    if(!stage||!track)return;
+    /* Detach every card owned by the previous certificate controller. Its old
+       event handlers/timers now reference detached nodes and cannot mutate this UI. */
+    var oldCards=Array.prototype.slice.call(track.querySelectorAll('.cv-card'));
+    if(!oldCards.length)return;
+    var cards=oldCards.map(function(c){return c.cloneNode(true);});
+    track.replaceChildren.apply(track,cards);
+    cards.forEach(function(c){c.className='cv-card';c.removeAttribute('style');});
+
+    var meta=[
+      ['CREATIVE AI','Create Engaging Video with Google Vids','Google / SkillUp','28 AUG 2026'],
+      ['AI + WEB','Build an Automated Landing Page using AI from Wix ADI','Coursera','13 AUG 2026'],
+      ['ANALYTICS','Create a Custom Marketing Analytics Dashboard in Data Studio','Coursera','13 AUG 2026'],
+      ['BUSINESS','Business Analysis & Process Management','Coursera','17 JUL 2026'],
+      ['DESIGN','Graphic design: pop your LinkedIn with 3D effect using Canva','Coursera','16 JUL 2026'],
+      ['DESIGN','Introduction to PicsArt for Social Media Marketing','Coursera','13 AUG 2026'],
+      ['COMMUNICATION','Public Speaking with Canva','Coursera','15 AUG 2026'],
+      ['CLOUD','Azure: Create a Virtual Machine and Deploy a Web Server','Coursera','13 AUG 2026'],
+      ['WEB','Creating a Free Business Page with Blogger','Coursera','16 JUL 2026'],
+      ['PRODUCTIVITY','Creating a Budget with Microsoft Excel','Coursera','20 AUG 2026'],
+      ['WEB','Build a free website with WordPress','Coursera','15 JUL 2026'],
+      ['PRODUCTIVITY','Getting Started with Microsoft Word','Coursera','16 JUL 2026'],
+      ['DESIGN','Design Online Course Printables using Canva','Coursera','16 JUL 2026'],
+      ['PROMPT ENGINEERING','One Million Prompters - Prompt Engineering','Dubai Future Foundation / Dubai Centre for AI','2026'],
+      ['UNIVERSITY TRAINING','Michigan Sport-Related Concussion Training Certification','University of Michigan','17 JUL 2026']
+    ];
+    var cur=0,timer=0,auto=true,drag=null,animating=false;
+    function wrap(n){return (n+cards.length)%cards.length;}
+    function render(){
+      cards.forEach(function(card,i){
+        var active=i===cur;
+        card.classList.toggle('is-active',active);
+        card.classList.toggle('is-prev',i===wrap(cur-1));
+        card.classList.toggle('is-next',i===wrap(cur+1));
+        card.classList.toggle('is-far',!active&&i!==wrap(cur-1)&&i!==wrap(cur+1));
+        card.style.setProperty('transform',active?'translate3d(-50%,-50%,0) scale(1)':'translate3d(-50%,-50%,0) scale(.985)','important');
+        card.style.setProperty('opacity',active?'1':'0','important');
+        card.style.setProperty('z-index',active?'50':'1','important');
+      });
+      var m=meta[cur]||[];
+      var el=document.getElementById('cvCurrent');if(el)el.textContent=String(cur+1).padStart(2,'0');
+      el=document.getElementById('cvMeterFill');if(el)el.style.width=((cur+1)/cards.length*100).toFixed(2)+'%';
+      el=document.getElementById('cvCategory');if(el)el.textContent=m[0]||'';
+      el=document.getElementById('cvTitle');if(el)el.textContent=m[1]||'';
+      el=document.getElementById('cvIssuer');if(el)el.textContent=(m[2]||'')+' · '+(m[3]||'');
+    }
+    function stop(){clearTimeout(timer);timer=0;}
+    function arm(){stop();if(!auto||document.hidden||matchMedia('(prefers-reduced-motion:reduce)').matches)return;timer=setTimeout(function(){go(1);},4200);}
+    function go(delta){if(animating)return;animating=true;cur=wrap(cur+delta);render();setTimeout(function(){animating=false;arm();},340);}
+    function openCert(){
+      var modal=document.getElementById('cvModal');if(!modal)return;
+      var img=modal.querySelector('img'),md=modal.querySelector('.cv-modal-meta'),src=cards[cur].querySelector('img');
+      if(img&&src){img.src=src.src;img.alt=meta[cur][1];}
+      if(md)md.textContent=(cur+1)+' / '+cards.length+' · '+meta[cur][1]+' · '+meta[cur][2]+' · '+meta[cur][3];
+      modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');stop();
+    }
+    function closeCert(){var modal=document.getElementById('cvModal');if(!modal)return;modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');arm();}
+    var prev=stage.querySelector('.cv-prev'),next=stage.querySelector('.cv-next');
+    if(prev)prev.onclick=function(e){e.preventDefault();e.stopPropagation();go(-1);};
+    if(next)next.onclick=function(e){e.preventDefault();e.stopPropagation();go(1);};
+    cards.forEach(function(card,i){card.onclick=function(e){if(e.target.closest&&e.target.closest('.cv-inspect')){cur=i;render();openCert();return;}if(i===cur)openCert();else{cur=i;render();arm();}};});
+    stage.addEventListener('pointerdown',function(e){if(e.target.closest&&e.target.closest('.cv-nav'))return;drag={id:e.pointerId,x:e.clientX,y:e.clientY};stop();},{passive:true});
+    stage.addEventListener('pointermove',function(e){if(!drag||e.pointerId!==drag.id)return;var dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.15)e.preventDefault();},{passive:false});
+    stage.addEventListener('pointerup',function(e){if(!drag||e.pointerId!==drag.id)return;var dx=e.clientX-drag.x;drag=null;if(Math.abs(dx)>45)go(dx<0?1:-1);else arm();},{passive:true});
+    stage.addEventListener('pointercancel',function(){drag=null;arm();},{passive:true});
+    var autoBtn=document.getElementById('cvAutoplay');if(autoBtn)autoBtn.onclick=function(e){e.preventDefault();auto=!auto;autoBtn.textContent=auto?'AUTO · ON':'AUTO · OFF';auto?arm():stop();};
+    var openBtn=document.getElementById('cvOpen');if(openBtn)openBtn.onclick=function(e){e.preventDefault();openCert();};
+    var mx=document.getElementById('cvModalX'),modal=document.getElementById('cvModal');if(mx)mx.onclick=closeCert;if(modal)modal.onclick=function(e){if(e.target===modal)closeCert();};
+    document.addEventListener('keydown',function(e){if(modal&&modal.classList.contains('is-open')){if(e.key==='Escape'){e.preventDefault();closeCert();}else if(e.key==='ArrowLeft'){e.preventDefault();go(-1);}else if(e.key==='ArrowRight'){e.preventDefault();go(1);}return;}if(e.key==='ArrowLeft'){e.preventDefault();go(-1);}else if(e.key==='ArrowRight'){e.preventDefault();go(1);}});
+    document.addEventListener('visibilitychange',function(){document.hidden?stop():arm();});
+    render();arm();
+  });
+})();
+</script>
 </body>
 </html>

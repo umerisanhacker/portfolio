@@ -13,15 +13,9 @@
 
   /*
    * LIFE TIMELINE — one authoritative renderer.
-   *
    * main.js contains an older global scroll animation that also writes an
-   * inline transform to #tlTrack. Inline writes were the reason the timeline
-   * repeatedly became stuck after the later fixes. We intentionally make the
-   * transform a CSS !important rule driven by a custom property. Legacy inline
-   * transform writes can no longer win the cascade.
-   *
-   * Vertical page scrolling remains completely native. The vertical distance
-   * through #life is mapped 1:1 to horizontal travel of the timeline track.
+   * inline transform to #tlTrack. The timeline below owns the transform via
+   * a CSS custom property marked !important, so the old writer cannot win.
    */
   (function(){
     'use strict';
@@ -31,48 +25,33 @@
     function install(){
       var life=document.getElementById('life');
       var sticky=life&&life.querySelector('.tl-sticky');
-      var oldTrack=life&&life.querySelector('#tlTrack');
-      if(!life||!sticky||!oldTrack||life.getAttribute('data-life-controller')==='active')return;
+      var track=life&&life.querySelector('#tlTrack');
+      if(!life||!sticky||!track||life.getAttribute('data-life-controller')==='active')return;
       life.setAttribute('data-life-controller','active');
 
-      /* CSS !important beats the legacy inline transform from main.js. */
       if(!document.getElementById('life-timeline-authority')){
         var css=document.createElement('style');
         css.id='life-timeline-authority';
-        css.textContent='#life .tl-track{transform:translate3d(var(--life-track-x,0px),0,0)!important;}';
+        css.textContent='\n          #life .tl-sticky{touch-action:pan-y!important;}\n          #life .tl-track{touch-action:pan-y!important;transform:translate3d(var(--life-track-x,0px),0,0)!important;}\n          #life .tl-item{touch-action:pan-y!important;}\n        ';
         document.head.appendChild(css);
       }
 
-      var track=oldTrack;
-      var raf=0;
-      var topY=0;
-      var travel=0;
-      var viewportH=0;
-      var sectionH=0;
-      var measured=false;
-      var measuring=false;
+      var raf=0,topY=0,travel=0,viewportH=0,sectionH=0,measured=false,measuring=false;
 
-      function getViewportHeight(){
-        return Math.max(1,Math.round(window.innerHeight||document.documentElement.clientHeight||1));
-      }
+      function getViewportHeight(){return Math.max(1,Math.round(window.innerHeight||document.documentElement.clientHeight||1));}
 
       function measure(){
-        if(measuring||!life||!track)return;
+        if(measuring||!life||!sticky||!track)return;
         measuring=true;
-
         track.style.setProperty('--life-track-x','0px');
-        track.style.setProperty('transform','translate3d(0,0,0)','');
-
         viewportH=getViewportHeight();
         var viewportW=Math.max(1,window.innerWidth||document.documentElement.clientWidth||1);
         travel=Math.max(0,track.scrollWidth-viewportW);
         sectionH=viewportH+travel;
-
         life.style.setProperty('height',sectionH+'px','important');
         life.style.setProperty('min-height',viewportH+'px','important');
         sticky.style.setProperty('height',viewportH+'px','important');
         sticky.style.setProperty('top','0px','important');
-
         topY=life.getBoundingClientRect().top+(window.scrollY||window.pageYOffset||0);
         measured=true;
         measuring=false;
@@ -82,13 +61,10 @@
       function render(){
         raf=0;
         if(!measured||!life||!track)return;
-
         var y=window.scrollY||window.pageYOffset||0;
         var local=y-topY;
         var x=clamp(local,0,travel);
         track.style.setProperty('--life-track-x',(-x).toFixed(2)+'px');
-
-        /* Keep the measured runway authoritative if legacy code changes it. */
         if(Math.abs((parseFloat(getComputedStyle(life).height)||0)-sectionH)>1){
           life.style.setProperty('height',sectionH+'px','important');
         }
@@ -102,14 +78,51 @@
       window.addEventListener('orientationchange',function(){setTimeout(measure,80)},{passive:true});
       if(window.visualViewport)window.visualViewport.addEventListener('resize',measure,{passive:true});
       if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
-
-      if(window.ResizeObserver){
-        var ro=new window.ResizeObserver(function(){measure();});
-        ro.observe(track);
-      }
-
+      if(window.ResizeObserver){var ro=new window.ResizeObserver(function(){measure();});ro.observe(track);}
       window.requestAnimationFrame(measure);
       setTimeout(measure,250);
+
+      /*
+       * MOBILE TOUCH FALLBACK
+       *
+       * In Chrome's device emulator (and on a few mobile WebKit combinations),
+       * a sticky + clipped timeline surface can become the touch target and the
+       * browser will not hand the vertical gesture back to document scrolling.
+       * For touches that begin inside #life we therefore translate the finger
+       * movement into native window scrolling. This is deliberately limited to
+       * coarse/mobile pointers and only to the timeline surface.
+       */
+      var touchStartY=0,touchStartX=0,touchActive=false,touchMoved=false;
+      var mobileQuery=window.matchMedia('(max-width:700px)');
+      function isMobile(){return mobileQuery.matches||('ontouchstart' in window);}
+
+      life.addEventListener('touchstart',function(e){
+        if(!isMobile()||!e.touches||e.touches.length!==1)return;
+        touchStartY=e.touches[0].clientY;
+        touchStartX=e.touches[0].clientX;
+        touchActive=true;
+        touchMoved=false;
+      },{passive:true});
+
+      life.addEventListener('touchmove',function(e){
+        if(!touchActive||!isMobile()||!e.touches||e.touches.length!==1)return;
+        var y=e.touches[0].clientY,x=e.touches[0].clientX;
+        var dy=y-touchStartY,dx=x-touchStartX;
+        if(!touchMoved){
+          if(Math.abs(dy)<4)return;
+          touchMoved=true;
+        }
+        /* A vertical finger drag scrolls the page in the opposite direction. */
+        if(Math.abs(dy)>=Math.abs(dx)){
+          e.preventDefault();
+          window.scrollBy(0,-dy);
+          touchStartY=y;
+          touchStartX=x;
+        }
+      },{passive:false});
+
+      life.addEventListener('touchend',function(){touchActive=false;touchMoved=false;},{passive:true});
+      life.addEventListener('touchcancel',function(){touchActive=false;touchMoved=false;},{passive:true});
     }
 
     if(document.readyState==='complete')setTimeout(install,0);

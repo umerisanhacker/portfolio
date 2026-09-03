@@ -2092,5 +2092,139 @@ html,body{overscroll-behavior-y:auto!important}
   });
 })();
 </script>
+
+<style id="timeline-mobile-native-final">
+/* FINAL MOBILE TIMELINE: never rely on position:sticky. Native page scrolling
+   stays in charge; the timeline viewport is temporarily fixed only while the
+   section is being traversed. */
+@media (max-width:700px){
+  #life{
+    position:relative!important;
+    height:100vh!important;
+    min-height:100vh!important;
+    overflow:visible!important;
+    isolation:auto!important;
+    contain:none!important;
+  }
+  #life .tl-sticky{
+    position:absolute!important;
+    left:0!important;
+    top:0!important;
+    width:100%!important;
+    height:100svh!important;
+    min-height:100svh!important;
+    overflow:hidden!important;
+    display:flex!important;
+    align-items:center!important;
+    contain:none!important;
+    isolation:auto!important;
+    overscroll-behavior: auto!important;
+    touch-action:pan-y!important;
+  }
+  #life .tl-track{
+    transform:translate3d(0,0,0)!important;
+    transition:none!important;
+    will-change:transform!important;
+    backface-visibility:hidden!important;
+  }
+  #life .tl-item{
+    flex:0 0 82vw!important;
+    width:82vw!important;
+    min-width:82vw!important;
+    height:184px!important;
+    min-height:184px!important;
+    max-height:184px!important;
+    transform:none!important;
+    transition:none!important;
+  }
+}
+</style>
+<script id="timeline-mobile-native-final">
+(function(){
+  'use strict';
+  function ready(fn){
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fn,{once:true});
+    else fn();
+  }
+  ready(function(){
+    var life=document.getElementById('life');
+    var sticky=life&&life.querySelector('.tl-sticky');
+    var oldTrack=life&&life.querySelector('#tlTrack');
+    if(!life||!sticky||!oldTrack)return;
+
+    /* Detach the track from every previous experimental scroll handler.
+       Those handlers retain the old node, so they can no longer fight this
+       controller. */
+    var track=oldTrack.cloneNode(true);
+    oldTrack.replaceWith(track);
+
+    var raf=0, topY=0, travel=0, vh=0, sectionH=0, measured=false;
+    var ticking=false;
+    function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+
+    function measure(){
+      if(!life||!sticky||!track)return;
+      var wasFixed=sticky.getAttribute('data-mobile-fixed')==='1';
+      if(wasFixed){
+        sticky.style.position='absolute';
+        sticky.removeAttribute('data-mobile-fixed');
+      }
+      track.style.setProperty('transform','translate3d(0,0,0)','important');
+      vh=Math.max(1,window.innerHeight||document.documentElement.clientHeight||1);
+      var width=Math.max(1,window.innerWidth||document.documentElement.clientWidth||1);
+      travel=Math.max(0,track.scrollWidth-width);
+      sectionH=vh+travel;
+      life.style.setProperty('height',sectionH+'px','important');
+      sticky.style.setProperty('height',vh+'px','important');
+      topY=life.getBoundingClientRect().top+(window.scrollY||window.pageYOffset||0);
+      measured=true;
+      render(true);
+    }
+
+    function render(force){
+      raf=0;
+      if(!measured)return;
+      var y=window.scrollY||window.pageYOffset||0;
+      var local=y-topY;
+      var active=local>0 && local<travel;
+      var x=clamp(local,0,travel);
+
+      if(active){
+        if(sticky.getAttribute('data-mobile-fixed')!=='1'){
+          sticky.style.setProperty('position','fixed','important');
+          sticky.style.setProperty('left','0','important');
+          sticky.style.setProperty('top','0','important');
+          sticky.style.setProperty('width','100%','important');
+          sticky.setAttribute('data-mobile-fixed','1');
+        }
+      }else{
+        if(sticky.getAttribute('data-mobile-fixed')==='1'){
+          sticky.style.setProperty('position','absolute','important');
+          sticky.removeAttribute('data-mobile-fixed');
+        }
+        sticky.style.setProperty('left','0','important');
+        sticky.style.setProperty('width','100%','important');
+        sticky.style.setProperty('top',(local<=0?0:travel)+'px','important');
+      }
+      track.style.setProperty('transform','translate3d('+(-x).toFixed(2)+'px,0,0)','important');
+    }
+
+    function schedule(){if(!raf)raf=requestAnimationFrame(render);}
+    function resize(){measure();}
+
+    measure();
+    window.addEventListener('scroll',schedule,{passive:true});
+    window.addEventListener('resize',resize,{passive:true});
+    if(window.visualViewport)window.visualViewport.addEventListener('resize',resize,{passive:true});
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
+    if(window.ResizeObserver){
+      var ro=new ResizeObserver(function(){measure();});
+      ro.observe(track);
+    }
+    window.addEventListener('orientationchange',function(){setTimeout(measure,80)},{passive:true});
+    requestAnimationFrame(measure);
+  });
+})();
+</script>
 </body>
 </html>

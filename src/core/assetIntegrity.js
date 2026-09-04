@@ -11,7 +11,7 @@
 
   function addNewCertificates(){
     var track=document.getElementById('cvTrack');
-    if(!track||track.querySelector('.cv-new-2026'))return;
+    if(!track||track.querySelector('[data-new-meta]'))return;
     items.forEach(function(item,i){
       var card=document.createElement('article');card.className='cv-card cv-new-2026';
       card.dataset.certIndex=String(track.querySelectorAll('.cv-card').length);card.dataset.newMeta=JSON.stringify(item.slice(0,5));card.tabIndex=0;
@@ -19,8 +19,7 @@
       card.innerHTML='<div class="cv-card-top"><span>CERT '+String(16+i).padStart(2,'0')+'</span><span>'+item[0]+'</span></div><div class="cv-card-image"><img src="'+item[5]+'" alt="'+item[1]+' certificate — Umer Abdullah PV" loading="lazy" decoding="async"></div>';
       track.appendChild(card);
     });
-    var stage=document.getElementById('cvStage');if(!stage)return;
-    stage.querySelectorAll('.sec-count,.cv-readout small').forEach(function(el){el.textContent=el.textContent.replace(/15/g,'18')});
+    var stage=document.getElementById('cvStage');if(stage)stage.querySelectorAll('.sec-count,.cv-readout small').forEach(function(el){el.textContent=el.textContent.replace(/15/g,'18')});
   }
 
   function bridgeCertificateMeta(){
@@ -28,13 +27,13 @@
     if(!stage||!track||track.__newCertBridge)return;
     track.__newCertBridge=true;
     function sync(){
-      var cards=stage.querySelectorAll('.cv-card'),active=stage.querySelector('.cv-card.cv-new-2026.is-active');if(!active)return;
+      var cards=stage.querySelectorAll('.cv-card'),active=stage.querySelector('.cv-card[data-new-meta].is-active');if(!active)return;
       var m=JSON.parse(active.dataset.newMeta||'[]'),idx=Array.prototype.indexOf.call(cards,active)+1;
       var cat=document.getElementById('cvCategory'),title=document.getElementById('cvTitle'),issuer=document.getElementById('cvIssuer'),current=document.getElementById('cvCurrent'),fill=document.getElementById('cvMeterFill');
       if(cat)cat.textContent=m[0]||'';if(title)title.textContent=m[1]||'';if(issuer)issuer.textContent=(m[2]||'')+' · '+(m[3]||'');if(current)current.textContent=String(idx).padStart(2,'0');if(fill)fill.style.width=(idx/cards.length*100).toFixed(2)+'%';
     }
     new MutationObserver(sync).observe(track,{subtree:true,attributes:true,attributeFilter:['class']});
-    stage.querySelectorAll('.cv-new-2026').forEach(function(card){
+    stage.querySelectorAll('.cv-card[data-new-meta]').forEach(function(card){
       card.addEventListener('click',function(e){
         if(!card.classList.contains('is-active'))return;
         e.preventDefault();e.stopImmediatePropagation();

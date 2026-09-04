@@ -2,6 +2,19 @@
 (function(w){
   var U=w.UmerPortfolio,Q=U.Utils;
   Q.ready(function(){
+    /* Correct any legacy biography wording without changing unrelated UAE references. */
+    var root=document.body,walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),node;
+    while((node=walker.nextNode())){
+      var t=node.nodeValue;
+      if(!t||!/(raised|grew up)[^.!?\n]{0,50}\bUAE\b/i.test(t))continue;
+      node.nodeValue=t
+        .replace(/I\s+was\s+raised\s+in\s+(?:the\s+)?UAE/gi,'I spent parts of my childhood and adolescence in the UAE')
+        .replace(/I\s+was\s+raised\s+in\s+(?:the\s+)?United Arab Emirates/gi,'I spent parts of my childhood and adolescence in the UAE')
+        .replace(/(?:raised|grew up)\s+in\s+(?:the\s+)?UAE/gi,'spent parts of my childhood and adolescence in the UAE')
+        .replace(/(?:raised|grew up)\s+in\s+(?:the\s+)?United Arab Emirates/gi,'spent parts of my childhood and adolescence in the UAE')
+        .replace(/UAE[-\s]+raised/gi,'spent parts of my childhood and adolescence in the UAE');
+    }
+
     var deck=document.querySelector('.transmissions-deck');
     var cards=deck?Q.$$('.transmissions-deck .quote'):[];
     if(!deck||!cards.length)return;

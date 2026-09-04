@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Umer Abdullah PV — Immersive Portfolio</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#17130f;color:#f6ead0;font-family:Arial,Helvetica,sans-serif}#world{position:fixed;inset:0}canvas{display:block}.hud{position:fixed;inset:0;pointer-events:none;z-index:5}.brand{position:absolute;left:28px;top:25px}.brand strong{display:block;font-size:13px;letter-spacing:.22em}.brand span{display:block;margin-top:7px;font-size:10px;letter-spacing:.12em;opacity:.65}.status{position:absolute;right:28px;top:25px;text-align:right;font-size:9px;line-height:1.7;letter-spacing:.12em;opacity:.65}.bottom{position:absolute;left:28px;right:28px;bottom:24px;display:flex;align-items:end;justify-content:space-between}.hint{font-size:9px;letter-spacing:.12em;opacity:.6;line-height:1.7}.nav{pointer-events:auto;display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.nav button{font:inherit;font-size:9px;letter-spacing:.14em;color:#f6ead0;background:#1b1712cc;border:1px solid #8d7a5a;border-radius:2px;padding:10px 13px;cursor:pointer}.nav button:hover{background:#3a2d1e}.intro{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;transition:opacity .7s}.intro h1{margin:0;font-size:clamp(34px,6vw,84px);letter-spacing:.08em;font-weight:500}.intro p{margin:15px 0 0;font-size:10px;letter-spacing:.32em;opacity:.62}.panel{position:fixed;z-index:10;right:28px;top:50%;transform:translateY(-50%) translateX(20px);width:min(440px,calc(100vw - 40px));max-height:78vh;overflow:auto;padding:30px;background:#201a14f2;border:1px solid #8d7a5a;box-shadow:0 20px 80px #0009;opacity:0;pointer-events:none;transition:.35s}.panel.open{opacity:1;pointer-events:auto;transform:translateY(-50%)}.panel small{font-size:9px;letter-spacing:.2em;opacity:.55}.panel h2{font-size:30px;font-weight:400;letter-spacing:.05em;margin:12px 0}.panel p{font-size:13px;line-height:1.8;color:#cdbfa4}.close{position:absolute;right:13px;top:10px;background:none;border:0;color:#f6ead0;font-size:24px;cursor:pointer}.cert{display:block;width:100%;margin:12px 0;border:1px solid #8d7a5a}.room-list{display:grid;gap:9px;margin-top:20px}.room-list div{padding:13px;border:1px solid #665742;background:#292118;font-size:10px;letter-spacing:.12em}.fade{position:fixed;inset:0;background:#080604;z-index:20;opacity:0;pointer-events:none;transition:opacity .8s}.fade.on{opacity:1}
+@media(max-width:650px){.brand{left:17px;top:17px}.status{right:17px;top:17px}.bottom{left:17px;right:17px;bottom:17px;display:block}.hint{margin-bottom:10px}.nav{justify-content:flex-start}.nav button{padding:9px 10px}.panel{left:14px;right:14px;bottom:14px;top:auto;transform:translateY(20px);width:auto;max-height:72vh}.panel.open{transform:none}}
+</style>
+</head>
+<body>
+<div id="world"></div><div class="fade" id="fade"></div>
+<div class="hud">
+ <div class="brand"><strong>UMER ABDULLAH PV</strong><span>CREATIVE DEVELOPER · DESIGNER</span></div>
+ <div class="status">IMMERSIVE PORTFOLIO<br><span id="mode">DESKTOP / POINTER</span></div>
+ <div class="intro" id="intro"><h1>UMER</h1><p>ENTER THE WORKSPACE</p></div>
+ <div class="bottom"><div class="hint">DRAG / SWIPE TO LOOK<br>CLICK A DOOR TO ENTER</div><nav class="nav">
+  <button data-room="ABOUT">ABOUT</button><button data-room="WORK">WORK</button><button data-room="SKILLS">SKILLS</button><button data-room="CERTIFICATES">CERTIFICATES</button><button data-room="CONTACT">CONTACT</button>
+ </nav></div>
+</div>
+<section class="panel" id="panel"><button class="close" id="close">×</button><div id="panelBody"></div></section>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.179.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.179.1/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+const root=document.getElementById('world'), scene=new THREE.Scene();
+scene.background=new THREE.Color(0x17130f);scene.fog=new THREE.Fog(0x17130f,16,62);
+const camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,120);camera.position.set(0,2.4,22);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;root.appendChild(renderer.domElement);
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.enablePan=false;controls.minDistance=5;controls.maxDistance=30;controls.minPolarAngle=1.15;controls.maxPolarAngle=1.95;controls.rotateSpeed=.35;controls.zoomSpeed=.55;
+scene.add(new THREE.HemisphereLight(0xfff1d1,0x20150c,1.8));const key=new THREE.DirectionalLight(0xffdba5,2.5);key.position.set(5,10,8);scene.add(key);
+const warm=new THREE.PointLight(0xff9d4d,18,18);warm.position.set(0,4,5);scene.add(warm);
+function mat(c,rough=.8,metal=0){return new THREE.MeshStandardMaterial({color:c,roughness:rough,metalness:metal})}
+const wood=mat(0x39281c),dark=mat(0x1b1510),floorMat=mat(0x4b3825),gold=mat(0xb48b52,.55,.5),paper=mat(0xe8d8b7);
+function box(w,h,d,x,y,z,m=wood){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);scene.add(o);return o}
+// Architectural corridor
+box(18,.35,70,0,0,-13,floorMat);box(18,.25,70,0,8,-13,dark);box(.35,8,70,-9,4,-13,wood);box(.35,8,70,9,4,-13,wood);
+for(let z=16;z>-49;z-=8){box(18,7,.25,0,4,z,wood);box(5.9,4.9,.18,-3.05,3.4,z-.16,paper);box(5.9,4.9,.18,3.05,3.4,z-.16,paper);}
+// ceiling beams and floor strips
+for(let z=16;z>-49;z-=8){box(18,.22,.5,0,7.65,z,gold);box(.12,.03,7,-3.05,.2,z-3,gold);box(.12,.03,7,3.05,.2,z-3,gold)}
+const rooms={ABOUT:{z:8,title:'ABOUT',tag:'THE PERSON BEHIND THE WORK',text:'Umer Abdullah PV — creative developer and designer. A personal workspace for building digital experiences, interfaces and visual work.'},WORK:{z:0,title:'SELECTED WORK',tag:'PROJECTS · BUILDS · EXPERIMENTS',text:'A room for websites, interactive builds, video work and creative experiments. Each project can become a physical display inside this world.'},SKILLS:{z:-8,title:'SKILLS',tag:'TOOLS & CRAFT',text:'UI/UX · Front-end development · Visual design · Video editing · Digital marketing. The room is designed to grow as your skillset grows.'},CERTIFICATES:{z:-16,title:'CERTIFICATE VAULT',tag:'CREDENTIALS · 2026',text:'Your certificates are displayed inside the portfolio world.',cert:true},CONTACT:{z:-24,title:'LET’S BUILD SOMETHING',tag:'CONTACT',text:'Have a project, idea or collaboration in mind? The contact room can connect directly to your existing portfolio contact actions.'}};
+const doors=[];
+function textTexture(label,sub){const cv=document.createElement('canvas');cv.width=1024;cv.height=420;const x=cv.getContext('2d');x.fillStyle='#201810';x.fillRect(0,0,1024,420);x.strokeStyle='#b48b52';x.lineWidth=6;x.strokeRect(25,25,974,370);x.fillStyle='#e8d8b7';x.textAlign='center';x.font='bold 76px Arial';x.fillText(label,512,190);x.font='22px Arial';x.fillStyle='#bca98b';x.fillText(sub,512,245);const t=new THREE.CanvasTexture(cv);return t}
+Object.entries(rooms).forEach(([name,d],i)=>{const group=new THREE.Group();group.position.set(0,0,d.z);scene.add(group);const frame=new THREE.Mesh(new THREE.BoxGeometry(7.3,6.2,.45),gold);frame.position.y=3.4;group.add(frame);const panel=new THREE.Mesh(new THREE.BoxGeometry(6.7,5.6,.5),dark);panel.position.set(0,3.4,.1);group.add(panel);const sign=new THREE.Mesh(new THREE.PlaneGeometry(5.8,2.35),new THREE.MeshBasicMaterial({map:textTexture(name,d.tag),transparent:false}));sign.position.set(0,3.4,.38);sign.userData.room=name;group.add(sign);doors.push(sign);const lamp=new THREE.PointLight(0xffb35d,9,9);lamp.position.set(0,5.8,1);group.add(lamp);});
+// entrance doors
+const ent=new THREE.Group();ent.position.z=18;scene.add(ent);const left=box(3.6,6,.45,-1.9,3,18,gold),right=box(3.6,6,.45,1.9,3,18,gold);left.userData.enter=1;right.userData.enter=1;
+for(const x of [-1.9,1.9]){const p=new THREE.Mesh(new THREE.PlaneGeometry(3.25,5.6),new THREE.MeshStandardMaterial({color:0x21170f,roughness:.65}));p.position.set(x,3,18.28);scene.add(p)}
+// subtle floating dust
+const pts=new THREE.BufferGeometry(),arr=new Float32Array(420*3);for(let i=0;i<arr.length;i+=3){arr[i]=(Math.random()-.5)*16;arr[i+1]=Math.random()*8;arr[i+2]=10-Math.random()*65}pts.setAttribute('position',new THREE.BufferAttribute(arr,3));scene.add(new THREE.Points(pts,new THREE.PointsMaterial({color:0xc5a878,size:.025,transparent:true,opacity:.5})));
+let entered=false,opening=false,dragStart=null;
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2(),panelEl=document.getElementById('panel'),body=document.getElementById('panelBody');
+function openRoom(name){const d=rooms[name];let html='<small>'+name+' · PORTFOLIO ROOM</small><h2>'+d.title+'</h2><p>'+d.text+'</p>';if(d.cert)html+='<img class="cert" src="assets/certificates/ui-ux-2026.svg"><img class="cert" src="assets/certificates/video-editing-2026.svg"><img class="cert" src="assets/certificates/digital-marketing-2026.svg">';if(name==='WORK')html+='<div class="room-list"><div>01 · WEB / INTERACTIVE</div><div>02 · VIDEO / MOTION</div><div>03 · DESIGN / UI</div></div>';body.innerHTML=html;panelEl.classList.add('open');controls.enabled=false}
+document.getElementById('close').onclick=()=>{panelEl.classList.remove('open');controls.enabled=true};
+function enterWorld(){if(entered||opening)return;opening=true;document.getElementById('fade').classList.add('on');setTimeout(()=>{left.position.x=-5;right.position.x=5;camera.position.set(0,2.4,12);controls.target.set(0,2.7,4);entered=true;document.getElementById('intro').style.opacity='0';document.getElementById('fade').classList.remove('on');opening=false},650)}
+function pointer(e){const r=renderer.domElement.getBoundingClientRect();mouse.x=(e.clientX-r.left)/r.width*2-1;mouse.y=-(e.clientY-r.top)/r.height*2+1;ray.setFromCamera(mouse,camera);const hit=ray.intersectObjects(doors,true)[0];if(hit?.object?.userData.room)openRoom(hit.object.userData.room);else {const h=ray.intersectObjects([left,right],true)[0];if(h)enterWorld()}}
+renderer.domElement.addEventListener('click',pointer);
+for(const b of document.querySelectorAll('.nav button'))b.onclick=()=>openRoom(b.dataset.room);
+renderer.domElement.addEventListener('pointerdown',e=>dragStart={x:e.clientX,y:e.clientY});renderer.domElement.addEventListener('pointerup',e=>{if(dragStart&&Math.hypot(e.clientX-dragStart.x,e.clientY-dragStart.y)<8)pointer(e);dragStart=null});
+const mode=document.getElementById('mode');if(matchMedia('(pointer:coarse)').matches)mode.textContent='MOBILE / TOUCH';
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+function tick(){requestAnimationFrame(tick);controls.update();if(entered&&!panelEl.classList.contains('open')){camera.position.z-=.0015;if(camera.position.z< -10)camera.position.z=12}renderer.render(scene,camera)}tick();
+</script></body></html>

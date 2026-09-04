@@ -68,3 +68,8 @@
 
 /* STARTUP LOADER — removed: enter the portfolio immediately */
 #loader{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+
+/* TRANSMISSION STACK — deterministic card layering, no CSS interpolation fights */
+.transmissions-deck{position:relative;isolation:isolate;overflow:hidden}
+.transmissions-deck .quote{position:absolute!important;left:50%!important;top:50%!important;transform-origin:center center!important;transition:none!important;will-change:transform,opacity,filter;backface-visibility:hidden;transform-style:preserve-3d}
+@media(max-width:700px){.transmissions-deck .quote{width:min(92vw,620px)!important}.transmissions-deck{overflow:hidden}}

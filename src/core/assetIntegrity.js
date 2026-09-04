@@ -19,7 +19,7 @@
       card.innerHTML='<div class="cv-card-top"><span>CERT '+String(16+i).padStart(2,'0')+'</span><span>'+item[0]+'</span></div><div class="cv-card-image"><img src="'+item[5]+'" alt="'+item[1]+' certificate — Umer Abdullah PV" loading="lazy" decoding="async"></div>';
       track.appendChild(card);
     });
-    var stage=document.getElementById('cvStage');if(stage)stage.querySelectorAll('.sec-count,.cv-readout small').forEach(function(el){el.textContent=el.textContent.replace(/15/g,'18')});
+    document.querySelectorAll('.sec-count,.cv-readout small').forEach(function(el){el.textContent=el.textContent.replace(/15/g,'18')});
   }
 
   function bridgeCertificateMeta(){
